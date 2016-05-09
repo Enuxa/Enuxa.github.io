@@ -1,0 +1,139 @@
+body {
+    background-color: rgb(30,30,30);
+    font-family: "Ubuntu";
+    color: gray;
+    font-size: 15pt;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+}
+
+input, button {
+    background-color: rgb(60,60,60);
+    margin-right: 10px;
+    border-style: solid;
+    border-color: gray;;
+    border-width: 1px;
+    border-radius: 3px;
+    color: lightgray;
+    padding: 4px;
+}
+
+button:active {
+    border-color: darkorange;
+}
+
+button:hover, input:focus {
+    background-color: rgb(80,80,80);
+}
+
+.subject {
+    border-color: rgb(50,50,50);
+    padding-left: 30px;
+    border-radius: 10px;
+    padding-bottom: 10px; 
+}
+
+.subject:hover {
+    background-color: rgb(35,35,35);
+}
+
+.subject + .subject {
+    border-top-style: solid;
+    border-width: 2px;
+    border-color: rgb(50,50,50);
+}
+
+.chapter {
+    padding-left: 30px;
+    margin-bottom: 50px;
+}
+
+.chapter + .chapter {
+    border-top-style: solid;
+    border-width: 2px;
+    border-color: rgb(50,50,50);
+}
+
+.chapter > h3, .subject > h2 {
+    padding: 4px;
+    display: inline-block;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+.chapter > h3:hover, .subject > h2:hover {
+    background-color: gray;
+    color: rgb(30,30,30);
+}
+
+.chapter > h3:active, .subject > h2:active {
+    background-color: gray;
+    color: rgb(30,30,30);
+    border-style: solid;
+    border-color: darkorange;
+}
+
+.nomargin {
+    color: darkred;
+}
+
+.margin {
+    color: darkslateblue;
+}
+
+.sessionslist {
+    margin-bottom: 20px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+#optionbar {
+    margin-top: 40px;
+}
+
+#subjectcreation {
+    margin-top: 20px;
+}
+
+#subjectslist {
+    margin-bottom: 60px;
+}
+
+.chaptercreation {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+#progressbar {
+    margin-bottom: 30px;
+    width: 100%;
+    height: 12pt;
+    display: inline-block;
+}
+
+#progressdone, #progressleft {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    display: inline-block;
+}
+
+#progressdone {
+    background-color: darkslateblue;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#progressleft {
+    background-color: rgb(50,50,50);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

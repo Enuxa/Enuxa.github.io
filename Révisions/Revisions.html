@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Gestionnaire de révisions</title>
+        <link href="Style.css" rel="stylesheet" type="text/css">
+        <meta charset="UTF-8">
+    </head>
+
+    <script type="text/javascript" src="Datas.js"></script>
+    <script type="text/javascript" src="Interaction.js"></script>
+    <script type="text/javascript" src="IO.js"></script>
+
+    <body>
+        <div id="Sessions">
+            <h1>Sessions de révisions</h1>
+            <ul id="subjectslist">
+            </ul>
+            <div id="subjectcreation">
+                <label for="subjectname">Intitulé<label>
+                <input type="text" id="subjectname" placeholder="Algèbre"></input>
+                <label for="subjectdate">Date de l'examen<label>
+                <input type="date" id="subjectdate" placeholder="YYYY/MM/DD"></input>
+                <button type="button" onclick="newSubject();">Nouvelle matière</button>
+            </div>
+        </div>
+        <div id="optionbar">
+            <label for="limit">Nombre limite d'exercices par jour</label>
+            <input type="number" id="limit" onchange="limitChanged();"></input>
+            <button type="button" onclick="if(confirm('Êtes vous sûr de vouloir réinitialiser votre planning de travail ?')) {studyDatas = new StudyDatas(); makePage();}">Réinitialiser le planning</button>
+        </div>
+        <p>
+            Pour supprimer un chapitre ou une matière, cliquez sur le titre correspondant.
+        </p>
+        <script type="text/javascript" src="OnLoad.js"></script>
+    </body>
+</html>

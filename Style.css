@@ -1,0 +1,36 @@
+body {
+    background-color: rgb(30,30,30);
+    font-family: "Ubuntu";
+    color: gray;
+    font-size: 15pt;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+}
+
+h1, h2, h3 {
+    padding: 4px;
+    display: inline-block;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
+}
+
+a:hover {
+    background-color: gray;
+    color: rgb(30,30,30);
+}
+
+a:active {
+    background-color: gray;
+    color: rgb(30,30,30);
+    border-style: solid;
+    border-color: darkorange;
+}
