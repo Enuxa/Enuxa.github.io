@@ -96,6 +96,10 @@ var Subject = function (name, date) {
         
         return n;
     }
+    
+    this.uncheckedCount = function() {
+        return this.sessionsCount() - this.checkedCount();
+    }
 }
 
 /**
@@ -116,6 +120,13 @@ var StudyDatas = function () {
             var n = 0;
             for(var subjectName in this.subjects) {
                 n += this.subjects[subjectName].checkedCount();
+            }
+            return n;
+        },        
+        uncheckedCount : function () {
+            var n = 0;
+            for(var subjectName in this.subjects) {
+                n += this.subjects[subjectName].uncheckedCount();
             }
             return n;
         },
@@ -156,6 +167,19 @@ var StudyDatas = function () {
             }
             
             return max;
+        },
+        getSortedByTardiness : function() {
+            var sorted = new Array();
+
+            for(var subjectName in this.subjects) {
+                sorted.push(this.subjects[subjectName]);
+            }
+
+            sorted.sort(function(a, b) {
+                return b.uncheckedCount() - a.uncheckedCount();
+            });
+
+            return sorted;
         },
         toString : function () {
             return this.subjects.toString();

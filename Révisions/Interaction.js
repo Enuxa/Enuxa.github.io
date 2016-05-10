@@ -1,4 +1,11 @@
 /**
+ * Interpolation cosinusoïdale de a et b selon un paramètre t
+ */
+function cerp(a, b, t) {
+    return (b - a) * (1 - Math.cos(t * Math.PI)) / 2 + a;
+}
+
+/**
  * Ajoute une session à la page
  * session      La session à ajouter
  * component    Le composant auquel ajouter la session
@@ -37,9 +44,10 @@ var addChapterSection = function (chapter, subjectName, component) {
     element.id = subjectName + "." + chapter.name;
     
     var h = document.createElement("h3");
-    h.innerHTML = chapter.name;
-    h.title = "Supprimer " + chapter.name;
+    setChapterHeaderContent(h, chapter);
+    h.id = subjectName + "." + chapter.name + ".header";
     h.setAttribute("onclick", "removeChapter('" + strToArg(subjectName) + "', '" + strToArg(chapter.name) + "');")
+    setChapterHeaderContent(h, chapter);
 
     var div = document.createElement("div");
     div.className = "chaptercollapse";
@@ -73,22 +81,11 @@ var addSubjectSection = function(subject, component) {
     element.id = subject.name;
     
     var h = document.createElement("h2");
+    h.id = subject.name + ".header";
     h.setAttribute("onclick", "removeSubject('" + strToArg(subject.name) + "');")
     h.title = "Supprimer " + subject.name;
-    var remainingDays = subject.exam.getDate() -  (new Date).getDate();
-    var margin = remainingDays - subject.sessionsCount() + subject.checkedCount();
-    var marginText = "<span class='" + (margin > 0 ? "margin" : "nomargin") + "'>" +
-                    (margin > 0 ? margin + " jour(s) de marge" : 
-                    (margin == 0 ? "aucun jour de marge !" : -margin + " jours de retard !")
-                    ) + "</span>";
-    h.innerHTML = subject.name + 
-                    " - " + 
-                    subject.exam.toLocaleDateString() + 
-                    " (" + 
-                    remainingDays + 
-                    " jour(s) restant, " + 
-                    marginText +
-                    ")";
+
+    setSubjectHeaderContent(h, subject);
     
     var list = document.createElement("ul");
     list.className = "chapterslist";
@@ -147,6 +144,8 @@ var newSubject = function() {
     studyDatas.save();
     
     addSubjectSection(subject, list);
+    
+    makeBar();
 }
 
 /**
@@ -164,7 +163,10 @@ var newChapter = function(subjectName) {
     
     studyDatas.save();
     
-    addChapterSection(chapter, list);
+    addChapterSection(chapter, subjectName, list);
+    
+    makeBar();
+    setSubjectHeaderContent(document.getElementById(subjectName + ".header") , studyDatas.subjects[subjectName])
 }
 
 /**
@@ -175,39 +177,58 @@ var strToArg = function(str) {
 }
 
 /**
- * (Re)construis la page
+ * Construis la page
  */
 var makePage = function() {
-    var list = document.getElementById("subjectslist");
-    
     makeBar();
     
+    var list = document.getElementById("subjectslist");
     document.getElementById("limit").value = studyDatas.limit;
     
-    for(var subject in studyDatas.subjects) {
-        addSubjectSection(studyDatas.subjects[subject], list);
+    var sorted = studyDatas.getSortedByTardiness();
+    for(var i in sorted) {
+        addSubjectSection(sorted[i], list);
     }
 }
 
+function setChapterHeaderContent(h, chapter) {
+    h.innerHTML = chapter.name + (chapter.isChecked() ? " &#10003;" : "");
+}
+
+function setSubjectHeaderContent(h, subject) {
+    var remainingDays = subject.exam.getDate() -  (new Date).getDate();
+    var margin = remainingDays - subject.sessionsCount() + subject.checkedCount();
+    var marginText = "<span class='" + (margin > 0 ? "margin" : "nomargin") + "'>" +
+                    (margin > 0 ? margin + " jour(s) de marge" : 
+                    (margin == 0 ? "aucun jour de marge !" : -margin + " jours de retard !")
+                    ) + "</span>";
+    h.innerHTML = subject.name + 
+                    " - " + 
+                    subject.exam.toLocaleDateString() + 
+                    " (" + 
+                    remainingDays + 
+                    " jour(s) restant, " + 
+                    marginText +
+                    ")";
+}
+
 /**
- * Acualise l'affichage de la barre d progrès.
+ * Acualise l'affichage de la barre de progrès.
  */
 var makeBar = function () {
-    var list = document.getElementById("subjectslist");
+    var body = document.body;
     var html = "<div id='progressbar'>\
                     <div id='progressdone' style='width: " + studyProgress + "%'><p>" + studyDatas.checkedCount() + " sessions faites</p></div>\
-                    <div id='progressleft' style='width: " + (99 - studyProgress) + "%'>" + (studyDatas.sessionsCount() - studyDatas.checkedCount()) + " sessions restantes</div>\
+                    <div id='progressleft' style='width: " + (99 - studyProgress) + "%'>" + studyDatas.uncheckedCount() + " sessions restantes</div>\
                     </div>";
     if(document.getElementById("progressbar") == null) {
-        list.innerHTML = html + list.innerHTML;
+        body.innerHTML = html + body.innerHTML;
     } else {
         document.getElementById("progressbar").innerHTML = html;
     }
     
     startProgressAnimation(studyProgress, studyDatas.getProgress() * 100);
 }
-
-var make
 
 /**
  * Lance l'animation pour l'actualisation de la barre de progression
@@ -217,13 +238,13 @@ var make
  */
 var startProgressAnimation = function(p0, p1) {
     var frameRate = 1 / 60;
-    var duration = 2000;
+    var duration = 1500;
     
     var stepCursor = 1000 * frameRate / duration;
 
     var cursor = 0;
     var interval = setInterval(function() {
-        studyProgress = p0 + Math.sin(cursor * Math.PI / 2) * (p1 - p0);
+        studyProgress = cerp(p0, p1, cursor);
         if(cursor < 0 || cursor > 1) {
             clearInterval(interval);
         } else {
@@ -246,6 +267,9 @@ var removeChapter = function(subjectName, chapterName) {
         
         var chapter = document.getElementById(subjectName + "." + chapterName);
         chapter.remove();
+        
+        makeBar();
+        setSubjectHeaderContent(document.getElementById(subjectName + ".header"), studyDatas.subjects[subjectName]);
     }
 }
 
@@ -260,6 +284,8 @@ var removeSubject = function(subjectName) {
         
         var subject = document.getElementById(subjectName);
         subject.remove();
+        
+        makeBar();
     }
 }
 
@@ -285,11 +311,15 @@ var checkedSession = function(subjectName, chapterName, sessionIndex, checked) {
     
     studyDatas.save();
     
-    startProgressAnimation(studyProgress, studyDatas.getProgress() * 100);
+    makeBar();
     
     if(chapter.isChecked() && !beforeChecked) {
         collapseToggle(subjectName, chapterName);
     }
+    
+    setChapterHeaderContent(document.getElementById(subjectName + "." + chapterName + ".header"), chapter);
+    
+    setSubjectHeaderContent(document.getElementById(subjectName + ".header"), studyDatas.subjects[subjectName]);
 }
 
 var collapseToggle = function (subjectName, chapterName) {
@@ -315,9 +345,8 @@ var collapseToggle = function (subjectName, chapterName) {
     var cursor = 0;
     
     var interval = setInterval(function () {
-        var scursor = Math.sin(cursor * Math.PI / 2);
-        list.setAttribute("style",  "height:" + (scursor * (height1 - height0) + height0) + "px;" +
-                                     "margin-top:" + (scursor * (margin1 - margin0) + margin0) + "px;");
+        list.setAttribute("style",  "height:" + cerp(height0, height1, cursor) + "px;" +
+                                     "margin-top:" + cerp(margin0, margin1, cursor) + "px;");
         
         if (cursor >= 1) {
             clearInterval(interval);

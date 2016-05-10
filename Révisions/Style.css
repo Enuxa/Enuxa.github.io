@@ -14,7 +14,7 @@ input, button {
     background-color: rgb(60,60,60);
     margin-right: 10px;
     border-style: solid;
-    border-color: gray;;
+    border-color: gray;
     border-width: 1px;
     border-radius: 3px;
     color: lightgray;
@@ -27,6 +27,7 @@ button:active {
 
 button:hover, input:focus {
     background-color: rgb(80,80,80);
+    transition-duration: 0.2s;
 }
 
 .subject {
@@ -65,6 +66,7 @@ button:hover, input:focus {
     border-style: solid;
     border-color: transparent;
     margin-bottom: 0;
+    transition-duration: 0.1s;
 }
 
 .chapter > h3:hover, .subject > h2:hover {
@@ -135,10 +137,12 @@ label {
 }
 
 #progressbar {
-    margin-bottom: 30px;
-    width: 100%;
+    margin-bottom: 6pt;
+    width: 99%;
     height: 12pt;
     display: inline-block;
+    position: fixed;
+    bottom: 0;
 }
 
 #progressdone, #progressleft {
@@ -152,6 +156,8 @@ label {
     color: transparent;
     font-size: 10pt;
     font-style: bold;
+    transition-property: color;
+    transition-duration: 0.5s;
 }
 
 #progressdone:hover, #progressleft:hover {
