@@ -25,7 +25,7 @@ var Chapter = function (name, exoCount, makeSessions) {
     
     var remainingPages = exoCount;
     
-    var sessionNbExxpectation = Math.ceil(exoCount / studyDatas.limit);
+    var sessionNbExxpectation = Math.round(exoCount / studyDatas.limit);
     var step = Math.ceil (exoCount / sessionNbExxpectation);
     
     while(makeSessions && remainingPages > 0) {
@@ -36,7 +36,7 @@ var Chapter = function (name, exoCount, makeSessions) {
     
     this.isChecked = function() {
         for(var session in this.sessions) {
-            if(!session.checked) {
+            if(!this.sessions[session].checked) {
                 return false;
             }
         }

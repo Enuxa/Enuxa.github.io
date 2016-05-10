@@ -48,7 +48,7 @@ button:hover, input:focus {
 
 .chapter {
     padding-left: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .chapter + .chapter {
@@ -64,6 +64,7 @@ button:hover, input:focus {
     border-width: 1px;
     border-style: solid;
     border-color: transparent;
+    margin-bottom: 0;
 }
 
 .chapter > h3:hover, .subject > h2:hover {
@@ -86,9 +87,26 @@ button:hover, input:focus {
     color: darkslateblue;
 }
 
-.sessionslist {
-    margin-bottom: 20px;
+.chaptercollapse {
+    display: inline-block;
+    width: 12pt;
+    height: 12pt;
+    border-radius: 50%;
+    padding: 0;
+    border-style: solid;
+    vertical-align: middle;
+    background-color: gray;
 }
+
+.chaptercollapse:not(:active) {
+    background-color: transparent;
+}
+
+.chaptercollapse:not(:hover) {
+    border-color: transparent;
+    border-color: transparent;
+}
+
 
 label {
     margin-right: 10px;
@@ -104,6 +122,11 @@ label {
 
 #subjectslist {
     margin-bottom: 60px;
+}
+
+.sessionslist {
+    margin-top: 20px;
+    overflow: hidden;
 }
 
 .chaptercreation {
@@ -124,6 +147,19 @@ label {
     padding: 0;
     border: 0;
     display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    color: transparent;
+    font-size: 10pt;
+    font-style: bold;
+}
+
+#progressdone:hover, #progressleft:hover {
+    color: white;
+}
+
+#progressdone > p, #progressleft > p {
+    margin: 0;
 }
 
 #progressdone {

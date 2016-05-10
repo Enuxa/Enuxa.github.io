@@ -40,6 +40,10 @@ var addChapterSection = function (chapter, subjectName, component) {
     h.innerHTML = chapter.name;
     h.title = "Supprimer " + chapter.name;
     h.setAttribute("onclick", "removeChapter('" + strToArg(subjectName) + "', '" + strToArg(chapter.name) + "');")
+
+    var div = document.createElement("div");
+    div.className = "chaptercollapse";
+    div.setAttribute("onclick", "collapseToggle(\'" + subjectName + "\', \'" + chapter.name + "\');");
     
     var list = document.createElement("ul");
     list.className = "sessionslist";
@@ -47,7 +51,12 @@ var addChapterSection = function (chapter, subjectName, component) {
         addSessionSection(chapter.sessions[i], subjectName, chapter.name, i, list);
     }
     
+    if(chapter.isChecked()) {
+        list.setAttribute("hidden", "");
+    }
+    
     element.appendChild(h);
+    element.appendChild(div);
     element.appendChild(list);
     
     component.appendChild(element);
@@ -137,7 +146,7 @@ var newSubject = function() {
     
     studyDatas.save();
     
-    makePage();
+    addSubjectSection(subject, list);
 }
 
 /**
@@ -155,7 +164,7 @@ var newChapter = function(subjectName) {
     
     studyDatas.save();
     
-    makePage();
+    addChapterSection(chapter, list);
 }
 
 /**
@@ -170,14 +179,8 @@ var strToArg = function(str) {
  */
 var makePage = function() {
     var list = document.getElementById("subjectslist");
-    list.innerHTML = "<div id='progressbar'>\
-                        <div id='progressdone' style='width: " + studyProgress + "%'></div>\
-                        <div id='progressleft' style='width: " + (99 - studyProgress) + "%'></div>\
-                     </div>";
-
-    startProgressAnimation(studyProgress,
-                            Math.floor(studyDatas.getProgress() * 100),
-                            500);
+    
+    makeBar();
     
     document.getElementById("limit").value = studyDatas.limit;
     
@@ -187,19 +190,39 @@ var makePage = function() {
 }
 
 /**
+ * Acualise l'affichage de la barre d progrès.
+ */
+var makeBar = function () {
+    var list = document.getElementById("subjectslist");
+    var html = "<div id='progressbar'>\
+                    <div id='progressdone' style='width: " + studyProgress + "%'><p>" + studyDatas.checkedCount() + " sessions faites</p></div>\
+                    <div id='progressleft' style='width: " + (99 - studyProgress) + "%'>" + (studyDatas.sessionsCount() - studyDatas.checkedCount()) + " sessions restantes</div>\
+                    </div>";
+    if(document.getElementById("progressbar") == null) {
+        list.innerHTML = html + list.innerHTML;
+    } else {
+        document.getElementById("progressbar").innerHTML = html;
+    }
+    
+    startProgressAnimation(studyProgress, studyDatas.getProgress() * 100);
+}
+
+var make
+
+/**
  * Lance l'animation pour l'actualisation de la barre de progression
  * p0       Le pourcentage de progression de départ
  * p1       Le pourcentage de progression final
  * duration Le temps de l'animation en millisecondes
  */
-var startProgressAnimation = function(p0, p1, duration) {
+var startProgressAnimation = function(p0, p1) {
     var frameRate = 1 / 60;
+    var duration = 2000;
     
     var stepCursor = 1000 * frameRate / duration;
 
     var cursor = 0;
     var interval = setInterval(function() {
-        cursor += stepCursor;
         studyProgress = p0 + Math.sin(cursor * Math.PI / 2) * (p1 - p0);
         if(cursor < 0 || cursor > 1) {
             clearInterval(interval);
@@ -207,6 +230,7 @@ var startProgressAnimation = function(p0, p1, duration) {
             document.getElementById("progressdone").style = "width:" + studyProgress + "%" ;
             document.getElementById("progressleft").style = "width:" + (99 - studyProgress) + "%" ;
         }
+        cursor += stepCursor;
     },
     1000 * frameRate);
 }
@@ -220,7 +244,8 @@ var removeChapter = function(subjectName, chapterName) {
         
         studyDatas.save();
         
-        makePage();
+        var chapter = document.getElementById(subjectName + "." + chapterName);
+        chapter.remove();
     }
 }
 
@@ -233,7 +258,8 @@ var removeSubject = function(subjectName) {
         
         studyDatas.save();
         
-        makePage();
+        var subject = document.getElementById(subjectName);
+        subject.remove();
     }
 }
 
@@ -250,11 +276,60 @@ var limitChanged = function() {
  * Fonction à appeler lorsqu'une session a été cochée
  */
 var checkedSession = function(subjectName, chapterName, sessionIndex, checked) {
-    var session = studyDatas.subjects[subjectName].chapters[chapterName].sessions[sessionIndex];
+    var chapter = studyDatas.subjects[subjectName].chapters[chapterName];
+    var session = chapter.sessions[sessionIndex];
+    
+    var beforeChecked = chapter.isChecked();
     
     session.checked = checked;
     
     studyDatas.save();
     
-    makePage();
+    startProgressAnimation(studyProgress, studyDatas.getProgress() * 100);
+    
+    if(chapter.isChecked() && !beforeChecked) {
+        collapseToggle(subjectName, chapterName);
+    }
+}
+
+var collapseToggle = function (subjectName, chapterName) {
+    var chapter = document.getElementById(subjectName + "." + chapterName);
+    var list = chapter.getElementsByClassName("sessionslist").item(0);
+    var frameRate = 1 / 60;
+    var duration = 300;
+
+    if(list.hasAttribute("hidden")) {
+        list.removeAttribute("hidden");
+        var height1 = list.clientHeight;
+        var margin1 = parseFloat(window.getComputedStyle(list).marginTop.replace("px", ""));
+        list.setAttribute("style", "height: 0px; margin-top: 0px;");
+        var height0 = 0;
+        var margin0 = 0;
+    } else {
+        var height0 = list.clientHeight;
+        var height1 = 0;        
+        var margin0 = parseFloat(window.getComputedStyle(list).marginTop.replace("px", ""));
+        var margin1 = 0;
+    }
+    
+    var cursor = 0;
+    
+    var interval = setInterval(function () {
+        var scursor = Math.sin(cursor * Math.PI / 2);
+        list.setAttribute("style",  "height:" + (scursor * (height1 - height0) + height0) + "px;" +
+                                     "margin-top:" + (scursor * (margin1 - margin0) + margin0) + "px;");
+        
+        if (cursor >= 1) {
+            clearInterval(interval);
+            if(height1 == 0) {
+                list.setAttribute("hidden", "");
+            }
+            list.removeAttribute("style");
+            return;
+        }
+
+        
+        cursor += 1000 * frameRate / duration;
+        cursor = Math.min(cursor, 1);
+    }, 1000 * frameRate);
 }
