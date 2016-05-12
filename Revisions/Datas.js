@@ -138,9 +138,14 @@ var StudyDatas = function () {
             }
         },
         save : function () {
-            var expiration = new Date(this.getLastExamDate().toJSON());
-            expiration.setDate(expiration.getDate() + 1);
-            document.cookie = "value=" + JSON.stringify(this) + "; expires=" + expiration.toUTCString() + ";";
+            var lastExam = this.getLastExamDate();
+            var expiration = "";
+            if(lastExam != null) {
+                var dateClone = new Date(lastExam.toISOString());
+                dateClone.setDate(dateClone.getDate() + 1);
+                expiration = "; expires=" + dateClone.toUTCString() + ";"
+            }
+            document.cookie = "value=" + JSON.stringify(this) + expiration;
         },
         getFirstExamDate : function () {
             var min = null;

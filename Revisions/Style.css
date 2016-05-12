@@ -6,6 +6,10 @@ body {
     padding: 20px;
 }
 
+p {
+    line-height: 20pt;
+}
+
 ul {
     list-style: none;
 }
@@ -116,6 +120,7 @@ label {
 
 #optionbar {
     margin-top: 40px;
+    margin-bottom: 60px;
 }
 
 #subjectcreation {
@@ -155,7 +160,6 @@ label {
     vertical-align: middle;
     color: transparent;
     font-size: 10pt;
-    font-style: bold;
     transition-property: color;
     transition-duration: 0.5s;
 }
@@ -178,4 +182,12 @@ label {
     background-color: rgb(50,50,50);
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+footer {
+    text-align: center;
+    border-top-style: solid;
+    border-color: rgb(50,50,50);
+    margin-top: 30px;
+    padding: 30px;
 }
