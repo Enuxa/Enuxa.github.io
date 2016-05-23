@@ -1,0 +1,82 @@
+body {
+    background-color: rgb(30,30,30);
+    color: white;
+    font-family: "ubuntu";
+    font-size: 15pt;
+    font-weight: bold;
+}
+
+li {
+    list-style: none;
+}
+
+form {
+    margin: 10px;
+}
+
+input, button, select {
+    background-color: rgb(60,60,60);
+    margin-right: 10px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 3px;
+    color: lightgray;
+    padding: 4px;
+}
+
+button:active, input[type="submit"]:active {
+    border-color: darkorange;
+}
+
+button:hover, input[type="submit"]:hover, input:focus, select:hover {
+    background-color: rgb(80,80,80);
+    transition-duration: 0.2s;
+}
+
+#axiom {
+    color: darkgreen;
+}
+
+#ruletable td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#ruletable .token + .nonterminal, #ruletable .nonterminal + .token,
+#ruletable .token + .token, #ruletable .nonterminal + .nonterminal {
+    margin-left: 10px;
+}
+
+#ruletable .token {
+    color: cyan;
+}
+
+#ruletable .nonterminal {
+    color: darkred;
+}
+
+td + td + td + td{
+    border-left: solid;
+}
+
+form {
+    margin-left: 0;
+}
+
+#nonterminals, #tokens, #rules, #analysis {
+    padding-left: 30px;
+    width: 97%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#tokens, #rules, #analysis {
+    border-top: solid;
+    border-width: 1px;
+    border-color: darkgray;
+}
+
+#analysis td + td{
+    padding-left: 20px; 
+}

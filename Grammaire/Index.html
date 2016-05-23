@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Grammaire</title>
+        <link rel="stylesheet" type="text/css" href="Style.css">
+    </head>
+    <body>
+        <div id="nonterminals">
+            <ul id="nonterminallist">
+            </ul>
+            <form name="newnonterminal" action="javascript:void(0)" method="post" onsubmit="newNonTerminal()">
+                <input type="text" name="nonterminalname" placeholder="S">
+                <input type="submit" value="Add non-terminal">
+            </form>
+        </div>
+        <div id="tokens">
+            <table id="tokentable">
+            </table>
+            <form name="newtoken" action="javascript:void(0)" method="post" onsubmit="newToken()">
+                <label for="tokentype">Type of the token</label>
+                <input type="text" name="tokentype" placeholder="IDENT">
+                <label for="regexp">Regular expression</label>
+                <input type="text" name="regexp" placeholder="[a-z][a-zA-Z]*">
+                <input type="submit" value="Add token">
+            </form>
+        </div>
+        <div id="rules">
+            <table id="ruletable">
+            </table>
+            <form name="newrule" action="javascript:void(0)" method="post" onsubmit="newRule()">
+                <label for="left">Left part</label>
+                <input type="text" name="left" placeholder="S">
+                <label for="right">Right part</label>
+                <input type="text" name="right" placeholder="E PLUS E \e">
+                <input type="submit" value="Add rule">
+            </form>
+        </div>
+        <div id="analysis">
+            <table>
+                <tr>
+                    <td>EPS</td>
+                    <td id="EPS"></td>
+                </tr>
+                <tr>
+                    <td>LL1</td>
+                    <td id="LL1"></td>
+                </tr>
+            </table>
+        </div>
+        
+        <script type="text/javascript" src="Lexical.js"></script>
+        <script type="text/javascript" src="Grammar.js"></script>
+        <script type="text/javascript" src="Interaction.js"></script>
+        
+        <script type="text/javascript">
+            updateAnalysis();
+        </script>
+    </body>
+</html>
