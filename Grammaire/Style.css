@@ -35,7 +35,7 @@ button:hover, input[type="submit"]:hover, input:focus, select:hover {
 }
 
 #axiom {
-    color: darkgreen;
+    color: darkgoldenrod;
 }
 
 #ruletable td {
@@ -90,4 +90,21 @@ form {
     border-width: 1px; 
     padding: 5px;
     float: left;
+}
+
+h2 {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+#parsesequence > .nonterminal {
+    color: darkred;
+}
+
+#parsesequence > .token {
+    color: cyan;
+}
+
+#parsesequence > .token, .nonterminal, .rightarrow {
+    margin-left: 10px;
 }

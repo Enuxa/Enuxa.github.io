@@ -99,6 +99,8 @@ function newRule() {
     grammar.addRule(rule);
     
     updateAnalysis();
+    
+    parse(false);
 }
 
 function removeRule(elt) {
@@ -118,6 +120,8 @@ function removeRule(elt) {
     }
     
     updateAnalysis();
+    
+    parse(false);
 }
 
 function newNonTerminal() {
@@ -149,6 +153,7 @@ function newNonTerminal() {
 function onAxiomChange(element) {
     var name = element.value;
     grammar.axiom = name;
+    element.setAttribute("checked", "");
 
     var list = document.getElementById("nonterminallist").children;
     for (var i = 0; i < list.length; i++) {
@@ -161,6 +166,8 @@ function onAxiomChange(element) {
             elt.removeAttribute("id");
         }
     }
+    
+    parse(false);
 }
 
 function updateAnalysis() {
@@ -257,18 +264,29 @@ function onRuleHoverOut(elt, isHover) {
     }
 }
 
-function parse() {
-    var text = document.forms["parseinput"]["input"].value;
+function parse(display) {
+    var input = document.forms["parseinput"]["input"];
+    var text = input.value;
     try {
         var tree = grammar.parse(text);
         var array = treeToString(tree, [], [], []);
+
+        input.removeAttribute("style");
+
+        if(!display) {
+            return;
+        }
+
         var ps = document.getElementById("parsesequence");
         ps.innerHTML = "";
+        
+        var html = "";
         for (var i = 0; i < array.length; i++) {
-            ps.innerHTML += array[i] + " ";
+            html += "<span class='" + array[i].type + "'>" + array[i].value + "</span>";
         }
         
+        ps.innerHTML = html;
     } catch (error) {
-        alert(error.message);
+        input.setAttribute("style", "color: red;");
     }
 }

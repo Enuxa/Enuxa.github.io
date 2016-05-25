@@ -398,24 +398,25 @@ function toSymbolList(inputString) {
 }
 
 function treeToString (tree, before, after) {
-	var str = before.concat([tree.value], after);
+	var str = before.concat([{value : tree.value, type : tree.label}], after);
 	for (var i = 0; i < tree.children.length; i++) {
 		var child = tree.children[i];
 		if (child.label == "nonterminal") {
 			var after2 = [];
 			var before2 = [];
 			for(var j = 0; j < i; j++) {
-				before2.push(tree.children[j].value);
+				before2.push({value : tree.children[j].value, type : tree.children[j].label});
 			}
 			for(var j = i+1; j < tree.children.length; j++) {
-				after2.push(tree.children[j].value);
+				after2.push({value : tree.children[j].value, type : tree.children[j].label});
 			}
-			str = str.concat(["&rArr;"], treeToString(child, before.concat(before2), after2.concat(after)));
+			str = str.concat([{value : "&rArr;", type : "rightarrow"}], treeToString(child, before.concat(before2), after2.concat(after)));
 		}
 	}
 	
-	if (tree.children.length == 1 && tree.children[0].label == "token") {
-		str = str.concat(["&rArr;"], before, tree.children[0].value, after);
+	if (tree.children.length == 1) {
+        var child = tree.children[0];
+		str = str.concat([{value : "&rArr;", type : "rightarrow"}], before, child.label == "epsilon" ? [] : {value : child.value.value, type : child.label}, after);
 	}
 	
 	return str;
