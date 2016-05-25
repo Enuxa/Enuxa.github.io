@@ -207,29 +207,28 @@ function updateEPS(EPS) {
 
 function onRuleHover(elt, left, ruleNb) {
     var symbols = grammar.analysis.FIRST1s[left][ruleNb - 2];
+    var fis = grammar.analysis.Fis[left][ruleNb - 2];
     
     var hoverElt = document.createElement("div");
     hoverElt.setAttribute("class", "ruledescription");
     
     var br = elt.getBoundingClientRect();
-    hoverElt.setAttribute("style", "top: " + (br.bottom + 10) + "px; left: " + br.left + "px;");
+    hoverElt.setAttribute("style", "top: " + (br.bottom + 10 + scrollY) + "px; left: " + br.left + "px;");
     
-    var content = "";
-    
+    var first1Str = "";
     var it = symbols.values();
     var o = it.next();
     while (!o.done) {
-        content += o.value;
+        first1Str += o.value;
         o = it.next();
         if (!o.done) {
-            content += ", ";
+            first1Str += ", ";
         }
     }
-    
-    if(content == "") {
-        content = "&empty;";
+    if(first1Str == "") {
+        first1Str = "&empty;";
     }
-    hoverElt.innerHTML = "FIRST1 : " + content;
+    hoverElt.innerHTML = "FIRST1 : " + first1Str;
     
     elt.appendChild(hoverElt);
 }
@@ -272,6 +271,7 @@ function parse(display) {
         var array = treeToString(tree, [], [], []);
 
         input.removeAttribute("style");
+        input.removeAttribute("title");
 
         if(!display) {
             return;
@@ -288,5 +288,6 @@ function parse(display) {
         ps.innerHTML = html;
     } catch (error) {
         input.setAttribute("style", "color: red;");
+        input.setAttribute("title", error.message);
     }
 }

@@ -182,7 +182,7 @@ var Grammar = function() {
 						FIRST1.add(s);
 					}
 				}
-				if (!EPS.indexOf(symbol.value)) {
+				if (EPS.indexOf(symbol.value) < 0) {
 					break;
 				}
 			} else if (symbol.type == "epsilon") {
@@ -230,7 +230,7 @@ var Grammar = function() {
 		var Fis = this.getFis(EPS);
 		var FIRST1s = this.getFIRST1s(Fis, EPS);
 		
-		return {EPS : EPS, FIRST1s : FIRST1s, isLL1 : this.isLL1(FIRST1s)};
+		return {EPS : EPS, FIRST1s : FIRST1s, Fis : Fis, isLL1 : this.isLL1(FIRST1s)};
 	}
     
     this.parse = function(input) {
@@ -252,7 +252,12 @@ var Grammar = function() {
 				}
 			} else {
 				if (FIRST1.has(flow[0].type)) {
-					return {label : "nonterminal", value : "S", children : rule.parse(flow, this.rules, this.analysis.FIRST1s)};
+                    var tree = {label : "nonterminal", value : "S", children : rule.parse(flow, this.rules, this.analysis.FIRST1s)};
+                    if (flow.length == 0) {
+                        return tree;
+                    } else {
+                        throw new Error("There are remaining tokens");
+                    }
 				}
 			}
 		}
