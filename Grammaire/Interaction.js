@@ -239,7 +239,6 @@ function onRuleOut(elt) {
         var classAttribute = child.getAttribute("class");
         if (classAttribute != null && classAttribute.valueOf() == "ruledescription") {
             child.remove();
-            return;
         }
     }
 }
@@ -276,16 +275,12 @@ function parse(display) {
         if(!display) {
             return;
         }
-
-        var ps = document.getElementById("parsesequence");
-        ps.innerHTML = "";
         
-        var html = "";
-        for (var i = 0; i < array.length; i++) {
-            html += "<span class='" + array[i].type + "'>" + array[i].value + "</span>";
-        }
+        var canvas = document.getElementById("tree");
+        canvas.innerHTML = "";
         
-        ps.innerHTML = html;
+        var treeBuilder = new TreeBuilder(tree, 40, 40, canvas);
+        treeBuilder.buildTree();
     } catch (error) {
         input.setAttribute("style", "color: red;");
         input.setAttribute("title", error.message);

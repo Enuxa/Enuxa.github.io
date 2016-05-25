@@ -78,7 +78,7 @@ var Grammar = function() {
                 for (var i = 0; !found && i < rules.length; i++) {
                     var rule = rules[i];
                     if(step == 0) {
-                        if (rule.symbols[0].type == "epsilon" && rule.symbols.length == 1) {
+                        if (rule.symbols.length == 1 && rule.symbols[0].type == "epsilon") {
                             EPS.push(left);
                             found = true;
                             break;
@@ -361,7 +361,7 @@ function Rule(left, symbols) {
  */
 function toSymbolList(inputString) {
     var list = [];
-    var input = inputString.split(/ +/);
+    var input = inputString.trim().split(/ +/);
 
 	if (input.length == 1 && input[0] == "\\e") {
 		return [{type : "epsilon", value : "&epsilon;"}];

@@ -60,12 +60,22 @@
                 <input type="text" name="input" oninput="parse(false)">
                 <button title="Create the parse tree" onclick="parse(true)" id="parsebutton">Parse</button>
             </form>
-            <div id="parsesequence">
-            </div>
+            <svg id="tree">
+            </svg>
+        </div>
+        <div id="manual">
+            <h2>Manual</h2>
+            <ol>
+                <li>Add the non-terminal symbols and select the axiom</li>
+                <li>Add the terminal symbols (tokens)</li>
+                <li>Add the production rules, using <code>\e</code> for &epsilon;</li>
+                <li>You can now parse words !</li>
+            </ol>
         </div>
         <script type="text/javascript" src="Lexical.js"></script>
         <script type="text/javascript" src="Grammar.js"></script>
         <script type="text/javascript" src="Interaction.js"></script>
+        <script type="text/javascript" src="Display.js"></script>
         
         <script type="text/javascript">
             updateAnalysis();
