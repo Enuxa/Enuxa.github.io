@@ -9,6 +9,7 @@ function toTokenFlow(inputString, tokenModel) {
     var input = inputString;
     while(input.length > 0) {
         var match = false;
+        input = input.trim();
         for (var i = 0; i < tokenModel.length; i++) {
             var token = tokenModel[i];
             var result = token.regexp.exec(input);

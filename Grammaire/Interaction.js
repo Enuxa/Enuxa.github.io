@@ -5,7 +5,8 @@ function newToken() {
     var tokentype = form["tokentype"].value;
     var regexp = form["regexp"].value;
 
-    if (/[A-Z]+/.exec(tokentype).indexOf(tokentype) < 0) {
+    var result = /[A-Z]+/.exec(tokentype);
+    if (result == null || result.indexOf(tokentype) < 0) {
         alert("The name of a token must be made up of uppercase letters.");
         return;
     }

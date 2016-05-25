@@ -133,8 +133,8 @@ var Grammar = function() {
 			},
 			length : function() {
 				var n = 0;
-				for (var i = 0; i < this.symbolsArray.length; i++) {
-					n += this.symbolsArray[i].length;
+				for (var left in  this.symbolsArray) {
+					n += this.symbolsArray[left].size;
 				}
 				return n;
 			}
