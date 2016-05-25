@@ -7,6 +7,7 @@ var Grammar = function() {
     this.nonTerminals = [];
     this.axiom = null;
     this.tokens = [];
+    this.analysis = null;
     
     this.removeToken = function (type) {
         for (var i = 0; i < this.tokens.length; i++) {
@@ -26,6 +27,8 @@ var Grammar = function() {
             this.axiom = rule.left;
         }
         this.rules[rule.left].push(rule);
+        
+        this.analysis = this.analyze();
     }
     
     this.removeRule = function (rule) {
@@ -40,6 +43,8 @@ var Grammar = function() {
                 delete this.rules[rule.left];
             }
         }
+        
+        this.analysis = this.analyze();
     }
     
     this.hasRule = function (rule) {
@@ -227,6 +232,33 @@ var Grammar = function() {
 		
 		return {EPS : EPS, FIRST1s : FIRST1s, isLL1 : this.isLL1(FIRST1s)};
 	}
+    
+    this.parse = function(input) {
+        var flow = toTokenFlow(input, this.tokens);
+		
+		if (!this.rules.hasOwnProperty(this.axiom)) {
+			throw new Error("No production rule associated with the axiom");
+		}
+		
+		var FIRST1s = this.analysis.FIRST1s[this.axiom];
+		
+		var rules = this.rules[this.axiom];
+		for (var r = 0; r < rules.length; r++) {
+			var rule = rules[r];
+			var FIRST1 = FIRST1s[r];
+			if (flow.length == 0) {
+				if (FIRST1.has("epsilon")) {
+					return {label : "epsilon", value : "epsilon", children : []};
+				}
+			} else {
+				if (FIRST1.has(flow[0].type)) {
+					return {label : "nonterminal", value : "S", children : rule.parse(flow, this.rules, this.analysis.FIRST1s)};
+				}
+			}
+		}
+		
+		throw new Error("Can't reduce " + this.axiom + " : " + (flow.length == 0 ? "can't produce &epsilon;" : (flow[0].type + " encountered")));
+    }
 }
 
 function Rule(left, symbols) {
@@ -258,6 +290,64 @@ function Rule(left, symbols) {
                 return true;
             }
         }
+    }
+    
+    this.parse = function(flow, rulesTab, FIRST1s) {
+        var nodes = [];
+        for (var s = 0; s < this.symbols.length; s++) {
+            var expected = this.symbols[s];
+            if (expected.type == "epsilon") {
+                nodes.push({label : "epsilon", value : "epsilon", children : []});
+                continue;
+            }
+            
+            var current = null;
+            if (flow.length == 0) {
+                current = {type : "epsilon", value : "epsilon"};
+            } else {
+                current = flow[0];
+            }
+            if (expected.type == "token") {
+                if (expected.value == current.type) {
+					flow.shift();
+                    nodes.push({label : "token", value : current.type, children : []});
+                } else {
+                    throw new Error("Unexpected token");
+                }
+            } else {
+                var rules = rulesTab[expected.value];
+                var epsilonRule = null;
+                for (var r = 0; r < rules.length; r++) {
+                    var FIRST1 = FIRST1s[expected.value][r];
+                    var rule = rules[r];
+                    if (FIRST1.has ("epsilon")) {
+                        epsilonRule = rule;
+                    }
+                }
+
+                var matched = false;
+                if (expected.type == "nonterminal") {
+                    for (var r = 0; r < rules.length; r++) {
+                        var FIRST1 = FIRST1s[expected.value][r];
+                        var rule = rules[r];
+                        if (FIRST1.has (current.type)) {
+                            nodes.push({label : "nonterminal", value : expected.value, children : rule.parse(flow, rulesTab, FIRST1s)});
+                            matched = true;
+                        }
+                    }
+                }
+				
+				if (!matched) {
+                    if (epsilonRule != null) {
+                    	nodes.push({label : "nonterminal", value : expected.value, children : epsilonRule.parse(flow, rulesTab, FIRST1s)});
+                    } else {
+					    throw new Error("Can't reduce " + expected.value + " : " + current.type + " encoutered");
+                    }
+				}
+            }
+        }
+		
+		return nodes;
     }
 }
 
@@ -305,4 +395,28 @@ function toSymbolList(inputString) {
     }
     
     return list;
+}
+
+function treeToString (tree, before, after) {
+	var str = before.concat([tree.value], after);
+	for (var i = 0; i < tree.children.length; i++) {
+		var child = tree.children[i];
+		if (child.label == "nonterminal") {
+			var after2 = [];
+			var before2 = [];
+			for(var j = 0; j < i; j++) {
+				before2.push(tree.children[j].value);
+			}
+			for(var j = i+1; j < tree.children.length; j++) {
+				after2.push(tree.children[j].value);
+			}
+			str = str.concat(["&rArr;"], treeToString(child, before.concat(before2), after2.concat(after)));
+		}
+	}
+	
+	if (tree.children.length == 1 && tree.children[0].label == "token") {
+		str = str.concat(["&rArr;"], before, tree.children[0].value, after);
+	}
+	
+	return str;
 }

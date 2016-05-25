@@ -13,7 +13,7 @@ function toTokenFlow(inputString, tokenModel) {
             var token = tokenModel[i];
             var result = token.regexp.exec(input);
 
-            if (result.length > 0 && input.substring(0, result[0].length) == result[0]) {
+            if (result != null && result.length > 0 && input.substring(0, result[0].length) == result[0]) {
                 list.push({type : token.type, value : result[0]});
                 input = input.replace (result[0], "");
                 match = true;
@@ -24,4 +24,6 @@ function toTokenFlow(inputString, tokenModel) {
             throw new Error("Can't find a token matching " + input);
         }
     }
+    
+    return list;
 }

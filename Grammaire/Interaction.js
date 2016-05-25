@@ -87,8 +87,8 @@ function newRule() {
         table.appendChild(row);
     }
 
-    var html = "<td><button onclick=\"removeRule(this.parentElement)\">x</button>";
-        
+    var html = "<td onmouseover='onRuleHoverOut(this, true)' onmouseout='onRuleHoverOut(this, false)'><button onclick=\"removeRule(this.parentElement)\">x</button>";
+    
     for (var i = 0; i < symbolList.length; i++) {
         var symbol = symbolList[i];
         html += "<span class=\"" + symbol.type + "\">" + symbol.value + "</span>";
@@ -164,9 +164,17 @@ function onAxiomChange(element) {
 }
 
 function updateAnalysis() {
-    var analysis = grammar.analyze();
-    updateEPS(analysis.EPS);
-    updateLL1(analysis.isLL1);
+    var analysis = grammar.analysis;
+    if (analysis != null) {
+        updateEPS(analysis.EPS);
+        updateLL1(analysis.isLL1);
+        var btn = document.getElementById("parsebutton");
+        if (!analysis.isLL1) {
+            btn.setAttribute("disabled", "");
+        } else {
+            btn.removeAttribute("disabled");            
+        }
+    }
 }
 
 function updateLL1(isLL1) {
@@ -187,5 +195,80 @@ function updateEPS(EPS) {
     }
     if(EPS.length == 0) {
         cell.innerHTML = "&empty;"
+    }
+}
+
+function onRuleHover(elt, left, ruleNb) {
+    var symbols = grammar.analysis.FIRST1s[left][ruleNb - 2];
+    
+    var hoverElt = document.createElement("div");
+    hoverElt.setAttribute("class", "ruledescription");
+    
+    var br = elt.getBoundingClientRect();
+    hoverElt.setAttribute("style", "top: " + (br.bottom + 10) + "px; left: " + br.left + "px;");
+    
+    var content = "";
+    
+    var it = symbols.values();
+    var o = it.next();
+    while (!o.done) {
+        content += o.value;
+        o = it.next();
+        if (!o.done) {
+            content += ", ";
+        }
+    }
+    
+    if(content == "") {
+        content = "&empty;";
+    }
+    hoverElt.innerHTML = "FIRST1 : " + content;
+    
+    elt.appendChild(hoverElt);
+}
+
+function onRuleOut(elt) {
+    for (var i = 0; i < elt.children.length; i++) {
+        var child = elt.children.item(i);
+        var classAttribute = child.getAttribute("class");
+        if (classAttribute != null && classAttribute.valueOf() == "ruledescription") {
+            child.remove();
+            return;
+        }
+    }
+}
+
+function onRuleHoverOut(elt, isHover) {
+    var row = elt.parentElement;
+    var left = row.getAttribute("name").valueOf(); 
+    var cells = row.children;
+    
+    var ruleNb = 0;
+    for (; ruleNb < cells.length; ruleNb++) {
+        if (cells.item(ruleNb) == elt) {
+            break;
+        }
+    }
+
+    if (isHover) {
+        onRuleHover(elt, left, ruleNb);
+    } else {
+        onRuleOut(elt);
+    }
+}
+
+function parse() {
+    var text = document.forms["parseinput"]["input"].value;
+    try {
+        var tree = grammar.parse(text);
+        var array = treeToString(tree, [], [], []);
+        var ps = document.getElementById("parsesequence");
+        ps.innerHTML = "";
+        for (var i = 0; i < array.length; i++) {
+            ps.innerHTML += array[i] + " ";
+        }
+        
+    } catch (error) {
+        alert(error.message);
     }
 }

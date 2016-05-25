@@ -64,14 +64,14 @@ form {
     margin-left: 0;
 }
 
-#nonterminals, #tokens, #rules, #analysis {
+#nonterminals, #tokens, #rules, #analysis, #parsing {
     padding-left: 30px;
     width: 97%;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-#tokens, #rules, #analysis {
+#tokens, #rules, #analysis, #parsing {
     border-top: solid;
     border-width: 1px;
     border-color: darkgray;
@@ -79,4 +79,15 @@ form {
 
 #analysis td + td{
     padding-left: 20px; 
+}
+
+.ruledescription {
+    position: absolute;
+    background-color: rgb(50,50,50);
+    border-radius: 5px;
+    border: solid;
+    border-color: white;
+    border-width: 1px; 
+    padding: 5px;
+    float: left;
 }
