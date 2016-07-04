@@ -141,69 +141,143 @@ function newNonTerminal() {
     
     grammar.nonTerminals.push(name);
     
-    var list = document.getElementById("nonterminallist");
-    var element = document.createElement("li");
-    element.innerHTML = "<input type='radio' name='axiom' onchange='onAxiomChange(this)' value='" + name + "'>" + name;
-    list.appendChild(element);
+    var table = document.getElementById("nonterminaltable");
+    var element = document.createElement("tr");
+    element.id = name;
+    
+    var radio = document.createElement("td");
+    radio.innerHTML = "<input type='radio' name='axiom' onchange='onAxiomChange(this)' value='" + name + "'>";
+    
+    var lbl = document.createElement("td");
+    lbl.innerHTML = name;
+    
+    var follows = document.createElement("td");
+    follows.innerHTML = "&empty;";
+
+    table.appendChild(element);
+    element.appendChild(radio);
+    element.appendChild(lbl);
+    element.appendChild(follows);
     
     if (grammar.nonTerminals.length == 1) {
         onAxiomChange(element.children.item(0));
     }
+    
+    updateAnalysis();
 }
 
 function onAxiomChange(element) {
-    var name = element.value;
+    var name = element.parentElement.parentElement.id;
     grammar.axiom = name;
     element.setAttribute("checked", "");
 
-    var list = document.getElementById("nonterminallist").children;
-    for (var i = 0; i < list.length; i++) {
-        var elt = list.item(i);
-        var input = elt.getElementsByTagName("input").item(0);
-        var X = input.value;
-        if (X == grammar.axiom) {
-            elt.setAttribute("id", "axiom");
+    var rows = document.getElementById("nonterminaltable").children;
+    for (var i = 0; i < rows.length; i++) {
+        var elt = rows.item(i);
+        var lbl = elt.children.item(1);
+        
+        if (elt.id == name) {
+            lbl.setAttribute("id", "axiom");
         } else {
-            elt.removeAttribute("id");
+            lbl.removeAttribute("id");
         }
     }
     
     parse(false);
 }
 
+function updateFOLLOWs(FOLLOW) {
+    for (var A in FOLLOW) {
+        var row = document.getElementById(A);
+        var cell = row.children.item(2);
+        var set = FOLLOW[A];
+        
+        if(set.size == 0) {
+            cell.innerHTML = "&empty;"
+        } else {
+            cell.innerHTML = "";
+            var it = set.values();
+            var o = it.next();
+            do {
+                cell.innerHTML += o.value;
+                o = it.next();
+                if (!o.done) {
+                    cell.innerHTML +=", ";
+                }
+            } while(!o.done)
+        }
+    }
+}
+
 function updateAnalysis() {
     var analysis = grammar.analysis;
-    if (analysis != null) {
-        updateEPS(analysis.EPS);
-        updateLL1(analysis.isLL1);
-        var btn = document.getElementById("parsebutton");
-        if (!analysis.isLL1) {
-            btn.setAttribute("disabled", "");
-        } else {
-            btn.removeAttribute("disabled");            
+    updateEPS(analysis.EPS);
+    updatePROD(analysis.PROD);
+    updateLL1(analysis.isLL1);
+    updateFOLLOWs(analysis.FOLLOWS);
+    var btn = document.getElementById("parsebutton");
+}
+
+function updatePROD(PROD) {
+    var cell = document.getElementById("PROD");
+    cell.innerHTML = "";
+    var cell2 = document.getElementById("NONPROD");
+    cell2.innerHTML = "";
+
+    var nonTerminals = grammar.nonTerminals;
+    if (nonTerminals.length == PROD.size) {
+        cell2.innerHTML = "&empty;";
+    } else {
+        var n = 0;
+        for (var i = 0; i < nonTerminals.length; i++) {
+            var symbol = nonTerminals[i];
+            if (!PROD.has(symbol)) {
+                cell2.innerHTML += symbol;
+                n++;
+                if (nonTerminals.length - PROD.size < n) {
+                    cell2.innerHTML += ", ";
+                }
+            }
         }
+    }
+
+    if(PROD.size == 0) {
+        cell.innerHTML = "&empty;"
+    } else {
+        var it = PROD.values();
+        var o = it.next();
+        do {
+            cell.innerHTML += o.value;
+            o = it.next();
+            if (!o.done) {
+                cell.innerHTML +=", ";
+            }
+        } while(!o.done)
     }
 }
 
 function updateLL1(isLL1) {
     var cell = document.getElementById("LL1");
     
-    cell.innerHTML = isLL1.toString();
+    cell.innerHTML = isLL1 ? "yes" : "no";
 }
 
 function updateEPS(EPS) {
     var cell = document.getElementById("EPS");
     
-    cell.innerHTML = "";
-    for (var i = 0; i < EPS.length; i++) {
-        cell.innerHTML += EPS[i];
-        if (i < EPS.length - 1) {
+    cell.innerHTML = "";    
+    var it = EPS.values();
+    var o = it.next();
+    while (!o.done) {
+        cell.innerHTML += o.value;
+        o = it.next();
+        if (!o.done) {
             cell.innerHTML += ", ";
         }
     }
-    if(EPS.length == 0) {
-        cell.innerHTML = "&empty;"
-    }
+    if(EPS.size == 0) {
+        cell.innerHTML = "&empty;";
+    }   
 }
 
 function onRuleHover(elt, left, ruleNb) {
@@ -234,12 +308,19 @@ function onRuleHover(elt, left, ruleNb) {
     elt.appendChild(hoverElt);
 }
 
-function onRuleOut(elt) {
-    for (var i = 0; i < elt.children.length; i++) {
-        var child = elt.children.item(i);
-        var classAttribute = child.getAttribute("class");
-        if (classAttribute != null && classAttribute.valueOf() == "ruledescription") {
-            child.remove();
+function onRuleOut() {
+    var rows = document.getElementById("ruletable").children;
+    for (var r = 0; r < rows.length; r++){
+        var cells = rows.item(r).children;
+        for(var d = 0; d < cells.length; d++){
+            var elt = cells.item(d);
+            for (var i = 0; i < elt.children.length; i++) {
+                var child = elt.children.item(i);
+                var classAttribute = child.getAttribute("class");
+                if (classAttribute != null && classAttribute.valueOf() == "ruledescription") {
+                    child.remove();
+                }
+            }
         }
     }
 }
@@ -259,11 +340,16 @@ function onRuleHoverOut(elt, isHover) {
     if (isHover) {
         onRuleHover(elt, left, ruleNb);
     } else {
-        onRuleOut(elt);
+        onRuleOut();
     }
 }
 
 function parse(display) {
+    if (display) {
+        alert("The grammar isn't LL(1)");
+        return;
+    }
+    
     var input = document.forms["parseinput"]["input"];
     var text = input.value;
     try {

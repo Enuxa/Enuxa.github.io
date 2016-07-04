@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Projection d'objets 4D sur un espace 3D</title>
+		<link href="../../Style.css" rel="stylesheet" type="text/css">
+		<link href="4D.css" rel="stylesheet" type="text/css">
+		<meta charset="UTF-8">
+
+		<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+	</head>
+
+	<body>
+		<h1>Calculs</h1>
+		<br>
+		<p>
+			On cherche à projeter des objets de \(E=\mathbb{R}^n\), d'origine \(O_E=(0,0,...,0)\), sur un hyperplan de lui même.<br>
+			Pour cela, on se donne un <i>point de vue</i> \(O \neq O_E\) et afin de simplifier les calculs, le regard de celui-ci sera dirigé vers l'origine de l'espace.<br>
+			On choisit ensuite comme hyperplan \(F=(OO_E)^{\perp}\).
+		</p>
+
+		<h2>Passage de la 2D à la 1D</h2>
+		<br>
+
+		\(E=\mathbb{R}^2\)
+		<br>
+
+		<img src="Images/2D.svg">
+		<br>
+
+		Commençons par le passage 2D &rarr; 1D, juste pour la forme.
+		<br>
+
+		<h2>Passage de la 3D à la 2D</h2>
+		<br>
+
+		\(E=\mathbb{R}^3\)
+		<br>
+
+		<img src="Images/3D.svg">
+		<br>
+
+		<p>
+			Ici, la partie du plan \(F\) qui est représentée est l'écran, et le point \(O\), l'oeil de l'observateur.<br>
+			Les rayons perçus par celui-ci, modélisés par \((OM)\), convergent vers ce point, et l'intersection \(M'\) du &laquo;rayon&raquo; \((OM)\) avec \(F\) est la projection de \(M\) sur \(F\).
+		</p>
+
+		<h2>Passage de la 4D à la 3D</h2>
+		<br>
+
+		<p>
+			On choisit comme point de vue \(O \neq O_E\) et on cherche à projeter \(M \neq O\) sur \(F\).<br>
+
+			Comme dans les cas précédents, notre point \(M'\) sera l'intersection de \((OM)\) et \(F\), qui est un sous-espace <strong>de dimension 0</strong> (donc réduit à un point).<br>
+
+      Pour pouvoir projeter \(M\) sur \(F\), il est nécessaire que \(\overrightarrow{OM}\) ne soit pas un vecteur de \(F\), sinon l'intersection sera vide (en dimensions 3, cela signifie que la droite \((OM)\) ne doit pas être parallèle au plan \(F\)).<br>
+    </p>
+
+    <p>
+			De plus, \(0 \leq dim (F \cap (OM)) \leq 1\), la seule façon d'avoir cette intersection de dimension 1 est que \((OM)\) soit contenue dans \(F\), ce qui est impossible :<br>
+
+			\(O \not\in F\), donc \(O \not\in (OM) \cap F\) et \((OM) \neq (OM) \cap F\).<br>
+		</p>
+
+    <p>
+      Ainsi \(F \cap (OM)\) n'est pas égal à \((OM)\) et est donc de dimension 0.
+    </p>
+
+		<p>
+			Définissons les ensemble \((OM)\) et \(F\) :
+			<ol>
+				<li>
+					\((OM)=\{P \in E ~ | ~ \exists k \in \mathbb{R} ~ : ~ \overrightarrow{OP} = k \cdot \overrightarrow{OM} \} \)<br>
+
+					\((OM)=\left\{(x,y,z,t) \in E ~ | ~ \exists k \in \mathbb{R} :
+					\left\{
+						\begin{array}{c}
+							x - O_x = k(M_x-O_x) \\
+							y - O_y = k(M_y-O_y) \\
+							z - O_z = k(M_z-O_z) \\
+							t - O_t = k(M_t-O_t) \\
+						\end{array}
+					\right. \right\} \) <br>
+
+					\((OM)=\left\{(x,y,z,t) \in E ~ | ~ \exists k \in \mathbb{R} :
+					\left\{
+						\begin{array}{c}
+							x = k(M_x-O_x) + O_x \\
+							y = k(M_y-O_y) + O_y \\
+							z = k(M_z-O_z) + O_z \\
+							t = k(M_t-O_t) + O_t \\
+						\end{array}
+					\right. \right\} \)
+				</li>
+				<li>
+					\(F=\left\{P \in E ~ | ~ \overrightarrow{O_EP} \perp \overrightarrow{O_EO}\right\}\)<br>
+
+					\(F=\left\{(x,y,z,t) \in E ~ | ~ x O_x + y O_y + z O_z + t O_t = 0 \right\}\)<br>
+				</li>
+			</ol>
+
+			On calcule à présent l'intersection :<br>
+
+			$$ F \cap (OM) = \left\{(x,y,z,t) \in E ~ | ~ \exists k ~ : ~
+				\left\{
+				      \begin{array}{c}
+					         [k(M_x - O_x) + O_x]O_x + [k(M_y - O_x) + O_y]O_y + [k(M_z - O_z) + O_z]O_z + [k(M_t - O_t) + O_t]O_t = 0 \\
+       							x = k(M_x-O_x) + O_x \\
+       							y = k(M_y-O_y) + O_y \\
+       							z = k(M_z-O_z) + O_z \\
+       							t = k(M_t-O_t) + O_t \\
+					    \end{array}
+				\right.
+        \right\}$$
+
+      On cherche à déterminer \(k\) :
+
+      $$k [O_x(M_x-O_x)+O_y(M_y-O_y)+O_z(M_z-O_z)+O_t(M_t-O_t)]=-O_x^2-O_y^2-O_z^2-O_t^2$$
+
+      On a supposé \(O \neq O_E\), donc le membre de droite est strictement négatif, et nécessairement les termes du produit de gauche sont tous les deux non-nuls.
+
+      $$k = \frac{O_x^2+O_y^2+O_z^2+O_t^2}{O_x(O_x-M_x) + O_y(O_y-M_y) + O_z(O_z-M_z) + O_t(O_t-M_t)}$$
+
+      $$k = \frac{O_x^2+O_y^2+O_z^2+O_t^2}{O_x^2 + O_y^2 + O_z^2 + O_t^2 - O_x M_x - O_y M_y - O_z M_z - O_t M_t}$$
+
+      Enfin :
+
+      $$\overrightarrow{O_E M'}=\overrightarrow{O_E O} + \overrightarrow{O M'} = \overrightarrow{O_E O} + k \cdot \overrightarrow{O M}$$
+
+      $$M'= O + \frac{O_x^2+O_y^2+O_z^2+O_t^2}{(O_x-M_x) + (O_y-M_y) + (O_z-M_z) + (O_t-M_t)} (M - O)$$
+		</p>
+
+    <p>
+      On a à présent les coordonnées dans \(\mathbb{R}^4\) de \(M'\), il ne reste plus qu'à obtenir ses coordonnées dans une base orthonormée \(\mathcal{B}=(e_1, e_2, e_3)\) de \(F\).<br>
+
+      Cette base est essentielle car elle définit l'orientation de \(F\) !<br>
+
+      On tire enfin les coordonnées de notre point final \(\widetilde{M}\) qui est un point de \(\mathbb{R}^3\) :
+
+      $$\widetilde{M} = \left(
+        \begin{array}{c}
+          \langle \overrightarrow{OM}, e_1 \rangle \\
+          \langle \overrightarrow{OM}, e_2 \rangle \\
+          \langle \overrightarrow{OM}, e_3 \rangle \\
+        \end{array}
+      \right)$$
+    </p>
+	</body>
+</html>

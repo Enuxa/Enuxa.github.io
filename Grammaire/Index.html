@@ -9,8 +9,8 @@
         <div id="grammar">
             <div id="nonterminals">
                 <h2>Non terminal symbols</h2>
-                <ul id="nonterminallist">
-                </ul>
+                <table id="nonterminaltable">
+                </table>
                 <form name="newnonterminal" action="javascript:void(0)" method="post" onsubmit="newNonTerminal()">
                     <input type="text" name="nonterminalname" placeholder="S">
                     <input type="submit" value="Add non-terminal">
@@ -43,6 +43,9 @@
             <div id="analysis">
                 <h2>Analysis</h2>
                 <table>
+                    <thead id="grammar">
+                        G=(&Sigma;, V, S, P)
+                    </thead>
                     <tr>
                         <td>EPS</td>
                         <td id="EPS"></td>
@@ -50,6 +53,14 @@
                     <tr>
                         <td>LL1</td>
                         <td id="LL1"></td>
+                    </tr>
+                    <tr>
+                        <td>PROD</td>
+                        <td id="PROD"></td>
+                    </tr>
+                    <tr>
+                        <td>N \ PROD</td>
+                        <td id="NONPROD"></td>
                     </tr>
                 </table>
             </div>
@@ -72,6 +83,7 @@
                 <li>You can now parse words !</li>
             </ol>
         </div>
+        <script type="text/javascript" src="Util.js"></script>
         <script type="text/javascript" src="Lexical.js"></script>
         <script type="text/javascript" src="Grammar.js"></script>
         <script type="text/javascript" src="Interaction.js"></script>

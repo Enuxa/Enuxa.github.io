@@ -34,6 +34,7 @@ function TreeBuilder(tree ,height, space, canvas) {
                 us.push(u);
             }
             x /= tree.children.length;
+            x -= bbox.width / 2;
         }
 
         node.setAttribute("x", x);
@@ -46,9 +47,9 @@ function TreeBuilder(tree ,height, space, canvas) {
             for (var i = 0; i < tree.children.length; i++) {
                 var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 line.setAttribute("x1", us[i]);
-                line.setAttribute("y1", y - bbox.height / 2 - 5);
+                line.setAttribute("y1", y - bbox.height / 2 - 10);
                 line.setAttribute("x2", x + bbox.width / 2);
-                line.setAttribute("y2", top + 5);
+                line.setAttribute("y2", top + 10);
                 this.canvas.appendChild(line);
             }
         }

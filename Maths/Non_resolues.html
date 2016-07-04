@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Questions ouvertes</title>
+        <link href="../Style.css" rel="stylesheet" type="text/css">
+        <link href="Non_resolues.css" rel="stylesheet" type="text/css">
+        <meta charset="UTF-8">
+        
+        <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    </head>
+
+    <body>
+        <h1>Questions ouvertes</h1>
+        <br>
+        
+        <h2>Analyse</h2>
+        
+        <ol>
+            <li><h3>Equivalence en l'infini d'une fonction avec sa translation</h3>
+                <p>
+                    Soit \(f : \mathbb{R} \longrightarrow \mathbb{R}\) une fonction dérivable telle que \(f'=o(f)\) en \(+\infty\).
+                    <br>
+                    Soit \(c > 0\), est il vrai que \(f(x+c) \sim f(x)\) en \(+\infty\) ?
+                </p>
+                <p>
+                    D'après le théorème des accroissements finis, pour tout \(x\) réel il existe \(\alpha_x \in [x, x+c]\) tel que \(f(x+c)-f(x) = c \, f'(\alpha_x) \).
+                    <br>
+                    Si \(f'(\alpha_x) = o(f(x))\) en \(+ \infty\), alors on a effectivement \(f(x+c) \sim f(x)\).
+                    <br>
+                    Voici donc le problème : étant donné une fonction \(\phi : \mathbb{R} \longrightarrow [0, c]\), l'implication suivante est elle vraie ?
+                    \(f'=o(f) \Longrightarrow f' \circ \phi = o(f)\)
+                </p>
+                
+                <p>
+                    <i>Exemples</i> : \(x \longmapsto x^{\alpha}, \alpha > 0 \)
+                    <br>
+                    
+                    <i>Remarque</i> : Cette proposition est évidemment vraie lorsque \(\displaystyle \lim_{+\infty} f' = 0\)
+                </p>
+            </li>
+        </ol>
+    </body>
+</html>

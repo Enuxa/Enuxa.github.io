@@ -127,11 +127,17 @@ h2 {
     fill: white;
 }
 
-line {
+#tree > line {
     stroke : darkgray;
+    stroke-width: 2px;
 }
 
 #tokentable  td {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#nonterminaltable td + td{
     padding-left: 20px;
     padding-right: 20px;
 }

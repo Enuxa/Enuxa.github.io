@@ -1,0 +1,16 @@
+body{
+  text-align: justify;;
+}
+
+line, path, rect {
+  stroke:white;
+  stroke-width:1px;
+}
+
+text, path {
+  fill:white;
+}
+
+text {
+  font-size: 15px;
+}

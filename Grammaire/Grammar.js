@@ -7,7 +7,6 @@ var Grammar = function() {
     this.nonTerminals = [];
     this.axiom = null;
     this.tokens = [];
-    this.analysis = null;
     
     this.removeToken = function (type) {
         for (var i = 0; i < this.tokens.length; i++) {
@@ -67,11 +66,11 @@ var Grammar = function() {
     }
     
     this.getEPS = function () {
-        var EPS = [];
+        var EPS = new Set();
         var previousLength = 0;
         var step = 0;
         do {
-            previousLength = EPS.length;
+            previousLength = EPS.size;
             for(var left in this.rules) {
                 var rules = this.rules[left];
                 var found = false;
@@ -79,7 +78,7 @@ var Grammar = function() {
                     var rule = rules[i];
                     if(step == 0) {
                         if (rule.symbols.length == 1 && rule.symbols[0].type == "epsilon") {
-                            EPS.push(left);
+                            EPS.add(left);
                             found = true;
                             break;
                         }
@@ -87,62 +86,30 @@ var Grammar = function() {
                         var allEPS = true;
                         for (var j = 0; j < rule.symbols.length; j++) {
                             var symbol = rule.symbols[j];
-                            if(symbol.type != "epsilon" && (symbol.type != "nonterminal" || EPS.indexOf(symbol.value) < 0)) {
+                            if(symbol.type != "epsilon" && (symbol.type != "nonterminal" || !EPS.has(symbol.value))) {
                                 allEPS = false;
                                 break;
                             }
                         }
-                        if (allEPS && EPS.indexOf(left) < 0) {
-                            EPS.push(left);
+                        if (allEPS) {
+                            EPS.add(left);
                             break;
                         }
                     }
                 }
             }
             step++;
-        } while(EPS.length > previousLength)
+        } while(EPS.size > previousLength)
         
         return EPS;
     }
     
     this.getFis = function (EPS) {
-		var Fis = {
-			symbolsArray : {},
-			getFi : function (A) {
-				if (!this.symbolsArray.hasOwnProperty(A)) {
-					return new Set();
-				}
-				return this.symbolsArray[A];
-			},
-			newFi : function(A) {
-				this.symbolsArray[A] = new Set();
-			},
-			add : function(A, a) {
-				if (!this.symbolsArray.hasOwnProperty(A)) {
-					this.newFi(A);
-				}
-				this.symbolsArray[A].add(a);
-			},
-			addAll : function(A, s) {
-				if (!this.symbolsArray.hasOwnProperty(A)) {
-					this.newFi(A);
-				}
-				for (let elt of s) {
-					this.symbolsArray[A].add(elt);
-				}
-			},
-			length : function() {
-				var n = 0;
-				for (var left in  this.symbolsArray) {
-					n += this.symbolsArray[left].size;
-				}
-				return n;
-			}
-		}
-		
+		var Fis = createSets(this.nonTerminals);
+        
 		var previousLength = 0;
 		do{
-			previousLength = Fis.length();
+			previousLength = cumulativeSizes(Fis);
 			for (var left in this.rules) {
 				var rules = this.rules[left];
 				for (var i = 0; i < rules.length; i++) {
@@ -152,20 +119,20 @@ var Grammar = function() {
 						if (symbol.type == "epsilon") {
 							continue;
 						} else if (symbol.type != "nonterminal") {
-							Fis.add(left, symbol.value);
+							Fis [left].add(symbol.value);
 							break;
 						} else {
-							Fis.addAll(left, Fis.getFi(symbol.value));
-							if (EPS.indexOf(left) < 0) {
+							set_addAllSet(Fis[left], Fis[symbol.value]);
+							if (!EPS.has(left)) {
 								break;
 							}
 						}
 					}
 				}
 			}
-		}while(previousLength != Fis.length())
+		}while(previousLength != cumulativeSizes (Fis))
 		
-		return Fis.symbolsArray;
+		return Fis;
     }
 	
 	this.getFIRST1 = function(Fis, symbols, EPS){
@@ -177,12 +144,10 @@ var Grammar = function() {
 				FIRST1.add(symbol.value);
 				break;
 			} else if (symbol.type == "nonterminal") {
-				if (Fis.hasOwnProperty(symbol.value)) {
-					for (let s of Fis[symbol.value]) {
-						FIRST1.add(s);
-					}
-				}
-				if (EPS.indexOf(symbol.value) < 0) {
+                for (let s of Fis[symbol.value]) {
+                    FIRST1.add(s);
+                }
+				if (!EPS.has(symbol.value)) {
 					break;
 				}
 			} else if (symbol.type == "epsilon") {
@@ -197,7 +162,7 @@ var Grammar = function() {
 		var FIRST1s = {};
 		for (var left in this.rules) {
 			var rules = this.rules[left];
-			FIRST1s[left] = [];
+            FIRST1s[left] = [];
 			for (var i = 0; i < rules.length; i++) {
 				FIRST1s[left].push(this.getFIRST1(Fis, rules[i].symbols, EPS));
 			}
@@ -206,31 +171,121 @@ var Grammar = function() {
 		return FIRST1s;
 	}
 	
-	this.isLL1 = function(FIRST1s) {
+	this.isLL1 = function(FIRST1s, FOLLOWS) {
 		for (var left in FIRST1s) {
 			var rules = FIRST1s[left];
+            var FOLLOW = FOLLOWS[left];
 			for (var i = 0; i < rules.length; i++) {
 				var symbols = rules[i];
 				for (var j = 0; j < i; j++) {
 					var symbols2 = rules[j];
-					for (let s of symbols2) {
-						if (symbols.has(s)) {
-							return false;
-						}
-					}
+                    if (hasIntersection(symbols, symbols2)) {
+                        return false;
+                    }
+                    if (symbols.has("epsilon") && !hasIntersection(symbols2, FOLLOW)) {
+                        return false;
+                    }
 				}
 			}
 		}
-		
+        
 		return true;
 	}
+    
+    this.getPROD = function() {
+        var previousLength = 0;
+        var PROD = new Set();
+        do {
+            previousLength = PROD.size;
+            for(var l = 0; l < this.nonTerminals.length; l++) {
+                var left = this.nonTerminals[l];
+                if (this.rules.hasOwnProperty(left)) {
+                    var rules = this.rules[left];
+                    for(var r = 0; r < rules.length; r++) {
+                        var symbols = rules[r].symbols;
+                        var prod = true;
+                        for (var s = 0; s < symbols.length; s++) {
+                            var symbol = symbols[s];
+                            if (symbol.type == "nonterminal" && !PROD.has(symbol.value)) {
+                                prod = false;
+                                break;
+                            }
+                        }
+                        if (prod) {
+                            PROD.add(left);
+                            break;
+                        }
+                    }
+                }
+            }
+        } while(previousLength != PROD.size)
+        
+        return PROD;
+    }
+    
+    this.getFOLLOW = function(EPS, Fis) {
+        var FOLLOWS = createSets(this.nonTerminals);
+        
+        //  Initialization
+        for (var left in this.rules) {
+            var rules = this.rules[left];
+            for (var r = 0; r < rules.length; r++) {
+                var rule = rules[r];
+                var symbols = rule.symbols;
+                for (var sA = 0; sA < symbols.length; sA++) {
+                    var A = symbols[sA].value;
+                    if (symbols[sA].type != "nonterminal")
+                        continue;
+                    for (var sC = sA + 1; sC < symbols.length; sC++) {
+                        var C = symbols[sC];
+                        if (C.type == "token") {
+                            FOLLOWS[A].add(C.value);
+                        } else if (C.type == "nonterminal") {
+                            set_addAllSet(FOLLOWS[A], Fis[C.value]);
+                            if (!EPS.has(C.value)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        //  Calcul
+        var previousLength = 0;
+        do {
+            previousLength = cumulativeSizes(FOLLOWS);
+            for (var left in this.rules) {
+                var rules = this.rules[left];
+                for (var r = 0; r < rules.length; r++) {
+                    var rule = rules[r];
+                    var symbols = rule.symbols;
+                    for (var sA = symbols.length - 1; sA >= 0; sA--) {
+                        var A = symbols[sA];
+                        if (A.type == "nonterminal") {
+                            set_addAllSet(FOLLOWS[A.value], FOLLOWS[left]);
+                            if (!EPS.has(A.value)) {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        } while(previousLength != cumulativeSizes(FOLLOWS))
+        
+        return FOLLOWS;
+    }
 	
 	this.analyze = function() {
 		var EPS = this.getEPS();
 		var Fis = this.getFis(EPS);
 		var FIRST1s = this.getFIRST1s(Fis, EPS);
-		
-		return {EPS : EPS, FIRST1s : FIRST1s, Fis : Fis, isLL1 : this.isLL1(FIRST1s)};
+        var PROD = this.getPROD();
+		var FOLLOWS = this.getFOLLOW(EPS, Fis);
+        
+		return {EPS : EPS, FIRST1s : FIRST1s, Fis : Fis, isLL1 : this.isLL1(FIRST1s, FOLLOWS), PROD : PROD, FOLLOWS : FOLLOWS};
 	}
     
     this.parse = function(input) {
@@ -264,6 +319,8 @@ var Grammar = function() {
 		
 		throw new Error("Can't reduce " + this.axiom + " : " + (flow.length == 0 ? "can't produce &epsilon;" : (flow[0].type + " encountered")));
     }
+    
+    this.analysis = this.analyze();
 }
 
 function Rule(left, symbols) {
@@ -338,6 +395,7 @@ function Rule(left, symbols) {
                         if (FIRST1.has (current.type)) {
                             nodes.push({label : "nonterminal", value : expected.value, children : rule.parse(flow, rulesTab, FIRST1s)});
                             matched = true;
+                            break;
                         }
                     }
                 }
