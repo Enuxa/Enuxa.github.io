@@ -2,148 +2,112 @@
 
 <html>
 	<head>
-		<title>Projection d'objets 4D sur un espace 3D</title>
+		<title>Projection d'objets de dimension n sur un plan</title>
 		<link href="../../Style.css" rel="stylesheet" type="text/css">
 		<link href="4D.css" rel="stylesheet" type="text/css">
 		<meta charset="UTF-8">
 
-		<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+		<script type="text/javascript" async src="../../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	</head>
 
 	<body>
-		<h1>Calculs</h1>
-		<br>
-		<p>
-			On cherche à projeter des objets de \(E=\mathbb{R}^n\), d'origine \(O_E=(0,0,...,0)\), sur un hyperplan de lui même.<br>
-			Pour cela, on se donne un <i>point de vue</i> \(O \neq O_E\) et afin de simplifier les calculs, le regard de celui-ci sera dirigé vers l'origine de l'espace.<br>
-			On choisit ensuite comme hyperplan \(F=(OO_E)^{\perp}\).
-		</p>
+    <h1>Affichage en perspective d'objets de dimension \(n\)</h1>
 
-		<h2>Passage de la 2D à la 1D</h2>
-		<br>
+		<h2>Projection sur un plan orienté</h2>
 
-		\(E=\mathbb{R}^2\)
-		<br>
-
-		<img src="Images/2D.svg">
-		<br>
-
-		Commençons par le passage 2D &rarr; 1D, juste pour la forme.
-		<br>
-
-		<h2>Passage de la 3D à la 2D</h2>
-		<br>
-
-		\(E=\mathbb{R}^3\)
-		<br>
-
-		<img src="Images/3D.svg">
-		<br>
-
-		<p>
-			Ici, la partie du plan \(F\) qui est représentée est l'écran, et le point \(O\), l'oeil de l'observateur.<br>
-			Les rayons perçus par celui-ci, modélisés par \((OM)\), convergent vers ce point, et l'intersection \(M'\) du &laquo;rayon&raquo; \((OM)\) avec \(F\) est la projection de \(M\) sur \(F\).
-		</p>
-
-		<h2>Passage de la 4D à la 3D</h2>
-		<br>
-
-		<p>
-			On choisit comme point de vue \(O \neq O_E\) et on cherche à projeter \(M \neq O\) sur \(F\).<br>
-
-			Comme dans les cas précédents, notre point \(M'\) sera l'intersection de \((OM)\) et \(F\), qui est un sous-espace <strong>de dimension 0</strong> (donc réduit à un point).<br>
-
-      Pour pouvoir projeter \(M\) sur \(F\), il est nécessaire que \(\overrightarrow{OM}\) ne soit pas un vecteur de \(F\), sinon l'intersection sera vide (en dimensions 3, cela signifie que la droite \((OM)\) ne doit pas être parallèle au plan \(F\)).<br>
+    <p>
+      On cherche à projeter <strong>en perspective</strong> un objet de \(E=\mathbb{R}^n\), d'origine \(O=(0,0,...0)\), muni du produit scalaire usuel, sur un plan \(F\).
+      <br>
+      Pour cela, il nous faut un point de vue \(C \neq O\) (afin de simplifier les calculs, le regard sera en direction de l'origine \(O\)).
+			<br>
+      On choisit ensuite un plan \(F \subseteq \left(\overrightarrow{OC}\right)^{\perp}\) muni d'une base orthonormée et orientée \((f_1, f_2)\).
+      <br>
     </p>
-
     <p>
-			De plus, \(0 \leq dim (F \cap (OM)) \leq 1\), la seule façon d'avoir cette intersection de dimension 1 est que \((OM)\) soit contenue dans \(F\), ce qui est impossible :<br>
+      Soit \(M \in E\), son projeté en perspective sur \(F\) est dans l'intersection \(I\) de \(F\) et \((CM)\).
+      Afin de pouvoir le projeter, il est nécéssaire qu'il n'apartienne pas au plan affine \(F + C\), en effet :
 
-			\(O \not\in F\), donc \(O \not\in (OM) \cap F\) et \((OM) \neq (OM) \cap F\).<br>
-		</p>
+      $$I \subseteq \left(\overrightarrow{OC}\right)^{\perp} \cap (CM) = \left\{P \in E ~ | ~ \left\langle\overrightarrow{OP}, \overrightarrow{OC}\right\rangle = 0 \right\} \cap \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM}\right\}$$
 
-    <p>
-      Ainsi \(F \cap (OM)\) n'est pas égal à \((OM)\) et est donc de dimension 0.
+			$$I \subseteq \left(\overrightarrow{OC}\right)^{\perp} \cap (CM) = \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM} ~ \text{et} ~ \left\langle\overrightarrow{OP}, \overrightarrow{OC}\right\rangle = 0 \right\}$$
+
+			$$I \subseteq \left(\overrightarrow{OC}\right)^{\perp} \cap (CM) = \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM} ~ \text{et} ~ \left\langle\overrightarrow{OC} + \overrightarrow{CP}, \overrightarrow{OC}\right\rangle = 0 \right\}$$
+
+			$$I \subseteq \left(\overrightarrow{OC}\right)^{\perp} \cap (CM) = \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM} ~ \text{et} ~ \left\|\overrightarrow{OC}\right\|^2 + \left\langle\overrightarrow{CP}, \overrightarrow{OC}\right\rangle = 0 \right\}$$
+
+			$$I \subseteq \left(\overrightarrow{OC}\right)^{\perp} \cap (CM) = \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM} ~ \text{et} ~ \left\|\overrightarrow{OC}\right\|^2 + k \cdot \left\langle\overrightarrow{CM}, \overrightarrow{OC}\right\rangle = 0 \right\}$$
+
+			Si \(M \in \left(C + \left(\overrightarrow{OC}\right)^{\perp}\right)\), alors en particulier \(\overrightarrow{CM} \in F \subseteq \left(\overrightarrow{OC}\right)^{\perp}\), d'où \(\left\langle\overrightarrow{CM}, \overrightarrow{OC}\right\rangle = 0\).
+			<br>
+			On a alors que \(F \cap (CM) \subseteq \left\{P \in E ~ | ~ \exists k \in \mathbb{R} : \overrightarrow{CP} = k \cdot \overrightarrow{CM} ~ \text{et} ~ \left\|\overrightarrow{OC}\right\|^2 = 0 \right\} = \emptyset\), car \(C \neq O\).
+			<br>
+
+			En revanche, si \(M \not\in \left(C + \left(\overrightarrow{OC}\right)^{\perp}\right)\), alors \(\left\langle\overrightarrow{CM}, \overrightarrow{OC}\right\rangle \neq 0\) et on peut calculer \(k\) :
+
+			$$k = -\frac{\left\|\overrightarrow{OC}\right\|^2}{\left\langle\overrightarrow{CM}, \overrightarrow{OC}\right\rangle} = \frac{\left\|\overrightarrow{OC}\right\|^2}{\left\langle\overrightarrow{MC}, \overrightarrow{OC}\right\rangle}$$
+
+			On peut enfin calculer \(I\) ! Il est vide si \(M' = C + k \cdot \overrightarrow{CM} \not\in F\), et égal au singleton \(\{M'\}\) dans le cas contraire.
     </p>
 
 		<p>
-			Définissons les ensemble \((OM)\) et \(F\) :
-			<ol>
-				<li>
-					\((OM)=\{P \in E ~ | ~ \exists k \in \mathbb{R} ~ : ~ \overrightarrow{OP} = k \cdot \overrightarrow{OM} \} \)<br>
+			Comment déterminer si \(M\) appartient à \(F\) ?
+			On possède une base de \(F\), on peut en tirer une paramétrisation du plan, mais cela ne nous permet pas de vérifier si \(M\) est bien dans \(F\).
+			<br>
+			On cherche alors à décrire \(F\) par un système de \(n-2\) équations linéaires homogènes.
+			<br>
+			Soit \(M = (x_i)_{i \leq n} = a f_1 + b f_2 \in F\).
 
-					\((OM)=\left\{(x,y,z,t) \in E ~ | ~ \exists k \in \mathbb{R} :
-					\left\{
-						\begin{array}{c}
-							x - O_x = k(M_x-O_x) \\
-							y - O_y = k(M_y-O_y) \\
-							z - O_z = k(M_z-O_z) \\
-							t - O_t = k(M_t-O_t) \\
-						\end{array}
-					\right. \right\} \) <br>
+			$$(L_i) : x_i = a f_{1,i} + b f_{2,i}, ~ i \leq n$$
 
-					\((OM)=\left\{(x,y,z,t) \in E ~ | ~ \exists k \in \mathbb{R} :
-					\left\{
-						\begin{array}{c}
-							x = k(M_x-O_x) + O_x \\
-							y = k(M_y-O_y) + O_y \\
-							z = k(M_z-O_z) + O_z \\
-							t = k(M_t-O_t) + O_t \\
-						\end{array}
-					\right. \right\} \)
-				</li>
-				<li>
-					\(F=\left\{P \in E ~ | ~ \overrightarrow{O_EP} \perp \overrightarrow{O_EO}\right\}\)<br>
+			Soit \(k\) tel que \(f_{1,k} \neq 0\), on construit le nouveau système : \((L_i) - \frac{f_{1,i}}{f_{1,k}} (L_k) \longrightarrow (L'_i), ~ i \leq n\)
 
-					\(F=\left\{(x,y,z,t) \in E ~ | ~ x O_x + y O_y + z O_z + t O_t = 0 \right\}\)<br>
-				</li>
-			</ol>
+			$$(L'_i) : x_i - \frac{f_{1,i}}{f_{1,k}} x_k = b f_{2,i} - b \frac{f_{1,i}}{f_{1,k}} f_{2,k}$$
 
-			On calcule à présent l'intersection :<br>
+			$$(L'_i) : x_i - \frac{f_{1,i}}{f_{1,k}} x_k = b \left(f_{2,i} - \frac{f_{1,i}}{f_{1,k}} f_{2,k}\right)$$
 
-			$$ F \cap (OM) = \left\{(x,y,z,t) \in E ~ | ~ \exists k ~ : ~
-				\left\{
-				      \begin{array}{c}
-					         [k(M_x - O_x) + O_x]O_x + [k(M_y - O_x) + O_y]O_y + [k(M_z - O_z) + O_z]O_z + [k(M_t - O_t) + O_t]O_t = 0 \\
-       							x = k(M_x-O_x) + O_x \\
-       							y = k(M_y-O_y) + O_y \\
-       							z = k(M_z-O_z) + O_z \\
-       							t = k(M_t-O_t) + O_t \\
-					    \end{array}
-				\right.
-        \right\}$$
+			$$(L'_i) : x_i - \frac{f_{1,i}}{f_{1,k}} x_k = b \frac{f_{2,i}f_{1,k} - f_{1,i} f_{2,k}}{f_{1,k}}$$
 
-      On cherche à déterminer \(k\) :
+			On pose \(\alpha_i = \frac{f_{1,i}}{f_{1,k}}\) et \(\beta_i = \frac{f_{2,i}f_{1,k} - f_{1,i} f_{2,k}}{f_{1,k}}\).
+			<br>
+			Soit \(l\) tel que \(\beta_l \neq 0\), on effectue l'opération \((L'_i) - \frac{\beta_i}{\beta_l} (L'_l) \longrightarrow (L''_i), ~ i \leq n\)
 
-      $$k [O_x(M_x-O_x)+O_y(M_y-O_y)+O_z(M_z-O_z)+O_t(M_t-O_t)]=-O_x^2-O_y^2-O_z^2-O_t^2$$
+			$$(L''_i) : x_i - \alpha_i x_k - \frac{\beta_i}{\beta_l}(x_l - \alpha_l x_k) = 0$$
 
-      On a supposé \(O \neq O_E\), donc le membre de droite est strictement négatif, et nécessairement les termes du produit de gauche sont tous les deux non-nuls.
+			$$(L''_i) : x_i - \frac{f_{1,i}}{f_{1,k}} x_k - \frac{\frac{f_{2,i}f_{1,k} - f_{1,i} f_{2,k}}{f_{1,k}}}{\frac{f_{2,l}f_{1,k} - f_{1,l} f_{2,k}}{f_{1,k}}}\left(x_l - \frac{f_{1,l}}{f_{1,k}} x_k\right) = 0$$
 
-      $$k = \frac{O_x^2+O_y^2+O_z^2+O_t^2}{O_x(O_x-M_x) + O_y(O_y-M_y) + O_z(O_z-M_z) + O_t(O_t-M_t)}$$
+			$$(L''_i) : x_i - \frac{f_{1,i}}{f_{1,k}} x_k - \frac{f_{2,i}f_{1,k} - f_{1,i} f_{2,k}}{f_{2,l}f_{1,k} - f_{1,l} f_{2,k}}\left(x_l - \frac{f_{1,l}}{f_{1,k}} x_k\right) = 0$$
 
-      $$k = \frac{O_x^2+O_y^2+O_z^2+O_t^2}{O_x^2 + O_y^2 + O_z^2 + O_t^2 - O_x M_x - O_y M_y - O_z M_z - O_t M_t}$$
+			$$(L''_i) : f_{1,k} x_i - f_{1,i} x_k - \frac{f_{2,i}f_{1,k} - f_{1,i} f_{2,k}}{f_{2,l}f_{1,k} - f_{1,l} f_{2,k}}\left(f_{1,k} x_l - f_{1,l} x_k\right) = 0$$
 
-      Enfin :
-
-      $$\overrightarrow{O_E M'}=\overrightarrow{O_E O} + \overrightarrow{O M'} = \overrightarrow{O_E O} + k \cdot \overrightarrow{O M}$$
-
-      $$M'= O + \frac{O_x^2+O_y^2+O_z^2+O_t^2}{(O_x-M_x) + (O_y-M_y) + (O_z-M_z) + (O_t-M_t)} (M - O)$$
+			\(F\) est ainsi décrit par les équations \((L''_i)_{i \neq k, l}\).
 		</p>
 
-    <p>
-      On a à présent les coordonnées dans \(\mathbb{R}^4\) de \(M'\), il ne reste plus qu'à obtenir ses coordonnées dans une base orthonormée \(\mathcal{B}=(e_1, e_2, e_3)\) de \(F\).<br>
+		<h2>Récupération des coordonnées écran</h2>
 
-      Cette base est essentielle car elle définit l'orientation de \(F\) !<br>
+		<p>
+			On obtient finalement les coordonnées de \(M'\) à l'écran :
+			\(\widetilde{M} = \left(
+				\begin{array}{c}
+					\left\langle\overrightarrow{OM'}, f1\right\rangle \\
+					\left\langle\overrightarrow{OM'}, f2\right\rangle \\
+				\end{array}
+				\right)
+			\)
+		</p>
 
-      On tire enfin les coordonnées de notre point final \(\widetilde{M}\) qui est un point de \(\mathbb{R}^3\) :
+		<h2>Détermination de la visibilité</h2>
 
-      $$\widetilde{M} = \left(
-        \begin{array}{c}
-          \langle \overrightarrow{OM}, e_1 \rangle \\
-          \langle \overrightarrow{OM}, e_2 \rangle \\
-          \langle \overrightarrow{OM}, e_3 \rangle \\
-        \end{array}
-      \right)$$
-    </p>
+		<p>
+			Pour construire l'écran \(S \subseteq F\), qui est un rectangle, on a besoin de deux données : l'angle de vision horizontal \(\alpha > 0\) et l'angle de vision vertical \(\beta > 0\).
+			<br>
+			De celles-ci on déduit les dimensions de l'écran : la largeur \(w = \tan \alpha \cdot \left\|\overrightarrow{OC}\right\|\) et la hauteur \(h = \tan \beta \cdot \left\|\overrightarrow{OC}\right\|\).
+		</p>
+
+		<p>
+			Si on a \(\left|\widetilde{M}_x\right| > w\) ou \(\left|\widetilde{M}_y\right| > h\), alors le point est hors-champ.
+			<br>
+			Si \(M'\) vérifie \(\left\langle\overrightarrow{MM'},\overrightarrow{MC}\right\rangle < 0\), alors c'est que le point à projeter est entre l'écran et le point de vue, il est donc également hors-champ.
+		</p>
+		<img src="Images/Ecran.svg">
 	</body>
 </html>

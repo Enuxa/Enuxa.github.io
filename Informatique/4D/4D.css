@@ -1,5 +1,9 @@
-body{
-  text-align: justify;;
+body {
+  text-align: justify;
+}
+
+h1, h2, h3 {
+  display: block;
 }
 
 line, path, rect {
@@ -13,4 +17,26 @@ text, path {
 
 text {
   font-size: 15px;
+}
+
+.preuve {
+  padding:10px;
+  border-radius: 10px;
+  border: solid;
+}
+
+ul {
+  list-style: circle;
+}
+
+li {
+  margin-top: 5px;
+}
+
+img {
+  max-width: 100%;
+}
+
+p {
+  padding-left: 20px;
 }
