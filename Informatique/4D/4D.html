@@ -109,5 +109,43 @@
 			Si \(M'\) vérifie \(\left\langle\overrightarrow{MM'},\overrightarrow{MC}\right\rangle < 0\), alors c'est que le point à projeter est entre l'écran et le point de vue, il est donc également hors-champ.
 		</p>
 		<img src="Images/Ecran.svg">
+		<h2>Algorithme résumé</h2>
+		<p>
+			Il faut préalablement avoir calculé les coefficients des équations \((L_i)_{i \neq k, l}\).
+		</p>
+    <p><b>Entrée</b> : \(M \in \mathbb{R}^n\)
+      <ol class="algorithm">
+        <li>
+          Si \(\left\langle\overrightarrow{MC}, \overrightarrow{OC}\right\rangle \neq 0\)
+          <ol class="algorithm">
+            <li>
+              \(M' = C + \frac{\left\|\overrightarrow{OC}\right\|^2}{\left\langle\overrightarrow{MC}, \overrightarrow{OC}\right\rangle} \cdot \overrightarrow{CM}\)
+            </li>
+            <li>
+              Si \(M' \in F\), c'est à dire s'il vérifie le système d'équations \((L_i)_{i \neq k, l}\)
+              <ol class="algorithm">
+                <li>
+                  On calcule \(\widetilde{M} = \left(
+            				\begin{array}{c}
+            					\left\langle\overrightarrow{OM'}, f1\right\rangle \\
+            					\left\langle\overrightarrow{OM'}, f2\right\rangle \\
+            				\end{array}
+            				\right)
+            			\)
+                </li>
+                <li>
+                  Si \(\left|\widetilde{M}_x\right| \leq w\), \(\left|\widetilde{M}_y\right| \leq h\) et \(\left\langle\overrightarrow{MM'},\overrightarrow{MC}\right\rangle \geq 0\)
+                  <ol class="algorithm">
+                    <li>
+                      <b>Sortie</b> : On affiche \(\widetilde{M}\) à l'écran après avoir adapté à la résolution de l'écran.
+                    </li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+          </ol>
+        </li>
+      </ol>
+    </p>
 	</body>
 </html>

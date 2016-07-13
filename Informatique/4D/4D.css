@@ -40,3 +40,12 @@ img {
 p {
   padding-left: 20px;
 }
+
+.algorithm {
+  list-style-type: square;
+  padding: 20px;
+  padding-left: 40px;
+  border: solid 1px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
