@@ -1,0 +1,14 @@
+circle{
+  stroke : white;
+  stroke-width : 1px;
+  fill: none;
+}
+
+line {
+  stroke : white;
+  stroke-width : 1px;
+}
+
+text{
+  fill:white;
+}

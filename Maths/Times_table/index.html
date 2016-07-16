@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Tables de multiplication</title>
+        <link href="../../Style.css" rel="stylesheet" type="text/css">
+        <link href="Times_table.css" rel="stylesheet" type="text/css">
+        <meta charset="UTF-8">
+
+    		<script type="text/javascript" async src="../../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    </head>
+
+    <body>
+        <h1>Tables de multiplication</h1>
+        <br>
+        <label for="mul">Table de </label>
+        <input type="number" id="mul" onchange="onChange()" value="2">
+        <label for="modulo">modulo</label>
+        <input type="number" id="modulo" onchange="onChange()" value="10">
+        <button onclick="onChange()">Dessiner</button>
+        <br>
+        <svg id="canvas"></svg>
+
+        <script type="text/javascript" src="Script.js"></script>
+
+        <script type="text/javascript">
+          onChange();
+        </script>
+    </body>
+</html>
