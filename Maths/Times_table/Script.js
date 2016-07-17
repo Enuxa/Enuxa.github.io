@@ -2,10 +2,14 @@ var canvasSize = 500;
 var margin = 50;
 
 var canvas = document.getElementById("canvas");
-canvas.setAttribute("style", "width:" + (canvasSize + 2 * margin) + "; height:" + (canvasSize + 2 * margin));
+canvas.setAttribute("style", "width:" + (canvasSize + 2 * margin) + "px; height:" + (canvasSize + 2 * margin) + "px;");
 
 function drawTimesTable(n, m) {
 canvas.innerHTML = "";
+
+while (canvas.firstChild) {
+    canvas.removeChild(canvas.firstChild);
+}
 
   var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
   circle.setAttribute("cx", margin + canvasSize / 2);
