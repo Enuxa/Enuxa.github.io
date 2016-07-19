@@ -3,11 +3,22 @@
 <html>
 		<head>
 				<title>Mandelbrot</title>
-				<link href="Style.css" rel="stylesheet" type="text/css">
+				<link href="../../Style.css" rel="stylesheet" type="text/css">
+				<link href="Mandelbrot.css" rel="stylesheet" type="text/css">
 				<meta charset="UTF-8">
 		</head>
 
 		<body>
 				<h1>Mandelbrot</h1>
+				<label>Niveau de zoom</label>
+				<input type="number" id="zoomsize" onchange="zoomSize=1/this.value;" value="2">
+				<label>Nombre d'itérations</label>
+				<input type="number" id="iterationnubmer" onchange="iterationNumber=this.value; fillRectangle();" value="100">
+				<canvas id="canvas" onclick="onClick(event);" onmousemove="onMove(event);"></canvas>
+				<script src="Complex.js" type="text/javascript"></script>
+				<script src="Script.js" type="text/javascript"></script>
+				<script type="text/javascript">
+					fillRectangle();
+				</script>
 		</body>
 </html>

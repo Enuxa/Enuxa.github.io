@@ -16,7 +16,7 @@ a {
 
 h1, h2, h3 {
     padding: 4px;
-    display: inline-block;
+    display: block;
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
