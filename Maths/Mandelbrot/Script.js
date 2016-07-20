@@ -2,15 +2,15 @@ var canvasSize = {w : 500, h : 500};
 var region = {x0 : -2, y0 : -2, x1 : 2, y1 : 2};
 
 var cursor = {x : canvasSize.w/2, y : canvasSize.h/2};
-var zoomSize = 0.5;
+var zoomSize = 0.25;
 
 var canvas = document.getElementById("canvas");
 canvas.width = canvasSize.w;
 canvas.height = canvasSize.h;
 var context = canvas.getContext("2d");
-var imgData = context.createImageData(canvasSize.w, canvasSize.h);
+var imgData = null;
 
-var maxIteration = 100;
+var maxIteration = 50;
 
 function setPixel(x, y, color) {
   var index = (y * canvasSize.w + x) * 4;
@@ -43,6 +43,7 @@ function getIterationNumber(c) {
 }
 
 function fillRectangle() {
+  imgData = context.createImageData(canvasSize.w, canvasSize.h)
   for (var i = 0; i < canvasSize.w; i++) {
     for (var j = 0; j < canvasSize.h; j++) {
       var c = new Complex(lerp(region.x0, region.x1, i / canvasSize.w), lerp(region.y0, region.y1, j / canvasSize.h));
@@ -83,5 +84,6 @@ function onMove(evt) {
 
   context.clearRect(0, 0, canvasSize.w, canvasSize.h);
   context.putImageData(imgData, 0, 0);
+  context.strokeStyle = "blue";
   context.strokeRect(x, y, canvasSize.w * zoomSize, canvasSize.h * zoomSize);
 }
