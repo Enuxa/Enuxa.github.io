@@ -4,18 +4,21 @@
     <head>
         <title>Questions ouvertes</title>
         <link href="../Style.css" rel="stylesheet" type="text/css">
-        <link href="Non_resolues.css" rel="stylesheet" type="text/css">
         <meta charset="UTF-8">
-        
-        <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+        <script type="text/javascript" src="../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <script type="text/javascript">
+
+        </script>
     </head>
 
     <body>
+        <div class="home"><a href='/index.html'>Retour</a></div>
         <h1>Questions ouvertes</h1>
         <br>
-        
-        <h2>Analyse</h2>
-        
+
+        <h2 class="h2Left">Analyse</h2>
+
         <ol>
             <li><h3>Equivalence en l'infini d'une fonction avec sa translation</h3>
                 <p>
@@ -31,14 +34,132 @@
                     Voici donc le problème : étant donné une fonction \(\phi : \mathbb{R} \longrightarrow [0, c]\), l'implication suivante est elle vraie ?
                     \(f'=o(f) \Longrightarrow f' \circ \phi = o(f)\)
                 </p>
-                
+
                 <p>
                     <i>Exemples</i> : \(x \longmapsto x^{\alpha}, \alpha > 0 \)
                     <br>
-                    
+
                     <i>Remarque</i> : Cette proposition est évidemment vraie lorsque \(\displaystyle \lim_{+\infty} f' = 0\)
                 </p>
             </li>
+
+            <li>
+              <h3>Equation differentielle et gravité</h3>
+              <p>
+                On considère un corps de masse \(m\) dont la distace au centre de la Terre à un moment donné est \(z\).
+                <br>
+                Sa position initiale est notée \(h_0\) et sa vitesse initiale \(v_0\).
+                <br>
+                D'après la seconde loi de Newton, on a \(F=m \, z''\).
+                <br>
+                L'unique force considérée est l'attraction gravitationnelle exercée par la Terre valant \(G\frac{Mm}{z^2}\), d'où :
+                $$G\frac{M \, m}{z^2} = m \, z''$$
+
+                $$G \, M = z^2 \, z''$$
+
+                On peut se ramener à l'équation suivante plus simple :
+
+                $$1 = z^2 \, z''$$
+
+                Supposons la solution de la forme \(z=e^h\) avec \(h \in \mathcal{C}^2(\mathbb{R}_+)\), on obtient la nouvelle équation
+
+                $$1 = e^{2h}(h'e^h)'$$
+
+                $$1 = e^{2h}\left(h''e^h + \left(h'\right)^2e^h\right)$$
+
+                $$1 = e^{3h}\left(h'' + \left(h'\right)^2\right)$$
+
+                $$e^{-3h} = h'' + \left(h'\right)^2$$
+              </p>
+            </li>
+        </ol>
+
+        <h2 class="h2Left">Combinatoire</h2>
+        <ol>
+          <li>
+            <h3>Coefficients de la &laquo;suite de Mandelbrot&raquo;</h3>
+            <p>
+              On rappelle que l'ensemble de Mandelbrot est l'ensemble des points \(c \in \mathbb{C}\) pour lesquels la suite défnie par
+              \(
+                \left\{
+                  \begin{array}{l}
+                    z_{n+1} = z_n^2 + c, ~ n \geqslant 0 \\
+                    z_0 = 0
+                  \end{array}
+                \right.
+              \)
+              est bornée en module.
+              <br>
+              Pour chaque \(n \in \mathbb{N}\), \(z_n\) est clairement un polynôme en \(c\) de degré \(2^n\).
+              <br>
+              Quelle est l'expression du coefficient de degré \(k\) du terme \(z_n\) ?
+              <br>
+            </p>
+            <p>
+              Pour tout \(N \geqslant n\), le coefficient devant \(c^N\) de \(z_n\) est le \((N-1)\)-ième nombre de Catalan \(C_N=\frac{1}{N+1}\binom{2N}{N}\), montrons le par récurrence :
+              <ul>
+                <li>
+                  \(n = 1\) :
+                  $$z_1 = c$$
+                </li>
+                <li>
+                  \(n > 1\) : Supposons la propriété vraie jusqu'au rang \(n - 1\).
+                  $$z_n = \sum_{k=1}^{n} C_{k-1} c^k + c^{n+1}P(c)$$
+
+                  $$z_n^2 = \left(\sum_{k=1}^{n} C_{k-1} c^k \right)^2 + 2c^{n+2} Q(c) + c^{2n+2} P^2(c)$$
+
+                  $$z_n^2 = \left(\sum_{k=1}^{n} C_{k-1} c^k \right)^2 + c^{n+2} R(c)$$
+
+                  $$z_n^2 = \sum_{k=2}^{2n} c^k \sum_{l=1}^{k} C_{l-1} C_{k-l} + c^{n+2} R(c)$$
+
+                  $$z_n^2 = \sum_{k=2}^{n+1} c^k \sum_{l=1}^{k} C_{l-1} C_{k-l} + c^{n+2} S(c)$$
+
+                  $$z_n^2 = \sum_{k=2}^{n+1} c^k \sum_{l=0}^{k-1} C_{l} C_{k-l-1} + c^{n+2} S(c)$$
+
+                  $$z_n^2 = \sum_{k=2}^{n+1} c^k C_{k} + c^{n+2} S(c)$$
+                </li>
+              </ul>
+            </p>
+          </li>
+          <li>
+            <p>
+              Soit \(\alpha \in \mathbb{R}^*\), on définit la suite \(\displaystyle a_n = \prod_{k=1}^{n} (k \alpha - 1)\).
+            </p>
+            <p>
+              On cherche une expression close de \(a_n\) pour tout \(n\).
+            <p>
+            <p>
+              Pour tout \(n \geqslant 1\), on a la relation de récurrence \(a_{n+1} = ((n+1)\alpha - 1)a_n = (n \alpha + (\alpha - 1))a_n = n \, \alpha \, a_n + (\alpha - 1) a_n\).
+              <br>
+              Construisons la série génératrice de la suite \((a_n)_{n}\) :
+              $$a_{n+1} = n \, \alpha \, a_n + (\alpha - 1) a_n$$
+
+              $$a_{n+1} z^{n+1} = z^2 \, \alpha \left(n \, a_n \, z^{n-1} \right) + z (\alpha - 1) a_n z^n$$
+
+              En sommant sur \(n\) :
+
+              $$\displaystyle \sum_{n \geqslant 1} a_{n+1} z^{n+1} = z^2 \, \alpha \sum_{n \geqslant 1}n \, a_n \, z^{n-1} + z (\alpha - 1) \sum_{n \geqslant 1} a_n z^n$$
+
+              $$\displaystyle \sum_{n \geqslant 1} a_{n+1} z^{n+1} = z^2 \, \alpha \left(\sum_{n \geqslant 1}a_n \, z^n \right)' + z (\alpha - 1) \sum_{n \geqslant 1} a_n z^n$$
+
+              $$\left(A(z)-(\alpha-1) z - 1\right) = z^2 \, \alpha A'(z) + z (\alpha - 1) (A(z)-1)$$
+
+              $$0 = \alpha z^2 A'(z) + (z(\alpha - 1) - 1)A(z) + 1$$
+
+              $$(E) ~ : ~ 0 = A'(z) + \frac{z(\alpha - 1) - 1}{\alpha z^2}A(z) + \frac{1}{\alpha z^2}$$
+
+              Il faut encore résoudre l'équation differentielle \((E)\), commençons par l'équation homogène associée \((H) ~ : ~ 0 = A'(z) + \frac{z(\alpha - 1) - 1}{\alpha z^2}A(z)\) (on cherchera une fonction définie sur \(\mathbb{R}_+\)).
+              <br>
+              Une primitive de \(\frac{z(1 - \alpha) + 1}{\alpha z^2}\) est \(\frac{1-\alpha}{\alpha} \ln z - \frac{1}{\alpha z} + c_0\) avec \(c_0 \in \mathbb{R}\).
+              <br>
+              L'espace de solution de l'équation homogène est donc \(S_H = \left\{z \longmapsto \gamma z^\frac{1-\alpha}{\alpha}e^{-\frac{1}{\alpha z}}, \, \gamma \in \mathbb{R} \right\}\).
+              <br>
+              Trouvons à présent une solution particulière de \((E)\).
+              <br>
+              Notons \(A_0(z) = c(t) z^\frac{1-\alpha}{\alpha}e^{-\frac{1}{\alpha z}}\) une solution particulière de l'équation, avec \(c(z)\) une primitive de \(\displaystyle \frac{1}{\alpha^2 z^{3\frac{1-\alpha}{\alpha}}e^{-\frac{1}{\alpha z}}}\)
+            </p>
+            <br>
+          </li>
         </ol>
     </body>
 </html>

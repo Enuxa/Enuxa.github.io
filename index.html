@@ -5,25 +5,44 @@
 				<title>Enuxa.github.io</title>
 				<link href="Style.css" rel="stylesheet" type="text/css">
 				<meta charset="UTF-8">
+				<style type="text/css">
+				body {
+					text-align: center;
+				}
+					#Mathematiques, #Informatique {
+						display: inline-block;
+						width: 45%;
+						padding: 10pt;
+					}
+					#Mathematiques {
+						float: left;
+						border-right: solid 1pt white;
+					}
+					ul {
+						list-style: none;
+					}
+				</style>
 		</head>
 
 		<body>
-				<h1>Pierre Galloway-Gervais</h1>
-				<br>
+			<h1>Pierre Galloway-Gervais</h1>
 
+			<div id="Mathematiques">
 				<h2>Mathématiques</h2>
+				<ul>
+					<li><a href="Maths/Non_resolues.html">Questions ouvertes</a></li>
+					<li><a href="Maths/Times_table/index.html">Tables de multiplications</a></li>
+					<li><a href="Maths/Mandelbrot/index.html">Ensemble de Mandelbrot</a></li>
+				</ul>
+			</div>
 
-				<p>
-					<a href="Maths/Non_resolues.html">Questions ouvertes</a><br>
-					<a href="Maths/Times_table/index.html">Tables de multiplications</a><br>
-					<a href="Maths/Mandelbrot/index.html">Ensemble de Mandelbrot</a>
-				</p>
-
+			<div id="Informatique">
 				<h2>Informatique</h2>
-				<p>
-						<a href="Revisions/Revisions.html">Gestionnaire de révisions</a><br>
-						<a href="Grammaire/Index.html">Grammar analyzer</a><br>
-						<a href="Informatique/4D/4D.html">Projection d'objets 4D sur un espace 3D</a><br>
-				</p>
+				<ul>
+						<li><a href="Revisions/Revisions.html">Gestionnaire de révisions</a></li>
+						<li><a href="Grammaire/Index.html">Grammar analyzer</a></li>
+						<li><a href="Informatique/4D/4D.html">Projection d'objets 4D sur un espace 3D</a></li>
+				</ul>
+			</div>
 		</body>
 </html>

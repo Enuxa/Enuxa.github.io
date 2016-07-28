@@ -1,36 +1,106 @@
-body {
-    background-color: rgb(30,30,30);
-    font-family: "Ubuntu";
-    color: lightgray;
-    font-size: 15pt;
-    padding: 20px;
+@font-face {
+  font-family: DefaultFont;
+  src:url(Fonts/League Gothic/LeagueGothic-Regular.otf);
 }
 
-ul {
-    list-style: none;
+@font-face {
+  font-family: TitleFont;
+  src:url(Fonts/Lobster.otf);
+}
+
+body {
+    background-color: rgb(30,30,30);
+    font-family: DefaultFont;
+    color: lightgray;
+    font-size: 15pt;
+    padding: 10pt;
+    margin: 0;
+    border: 0;
+}
+
+.home {
+  position: fixed;
+  right: 5pt;
+  bottom: 5pt;
+  background-color: rgb(50,50,50);
+  border-radius: 5pt;
+  padding: 5pt 10pt 5pt 10pt;
+  font-size: 20pt;
+}
+
+.home:hover {
+  background-color: rgb(50,50,50);
+}
+
+ul, ol {
+  padding: 0 20pt 0 20pt;
+  margin: 10pt 25pt;
+}
+
+li {
+  padding: 5pt;
+  padding-left: 10pt;
+  border-radius: 10pt;
+}
+
+li:hover {
+  background-color: rgb(26,26,26);
+  transition-duration: 120ms;
+  transition-timing-function: ease-in-out;
+}
+
+p {
+  padding: 0 20pt 0 20pt;
 }
 
 a {
     color: inherit;
+    text-decoration: none;
+    font-style: italic;
+}
+
+h1 {
+  text-align: center;
+  font-size: 50pt;
+  margin: 0;
 }
 
 h1, h2, h3 {
-    padding: 4px;
+    padding: 10pt;
     display: block;
-    border-radius: 5px;
+    border-radius: 10pt;
     border-width: 1px;
     border-style: solid;
     border-color: transparent;
 }
 
-a:hover {
-    background-color: gray;
-    color: rgb(30,30,30);
+h1:hover, h2:hover {
+  background-color: rgb(35,35,35);
+  transition-duration: 150ms;
 }
 
-a:active {
-    background-color: gray;
-    color: rgb(30,30,30);
-    border-style: solid;
-    border-color: darkorange;
+h1, h2 {
+    font-family: TitleFont;
+}
+
+h1:before, h1:after {
+  content: "";
+  display: inline-block;
+  width: 20%;
+  margin: 0 10pt 0 10pt;
+  vertical-align: middle;
+  border-bottom: 1px solid;
+}
+
+.h2Left:after {
+  content: "";
+  display: inline-block;
+  width: 80%;
+  margin: 0 10pt 0 10pt;
+  vertical-align: middle;
+  border-bottom: 1pt solid gray;
+}
+
+h3 {
+  font-weight: bold;
 }

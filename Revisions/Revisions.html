@@ -4,9 +4,11 @@
     <head>
         <title>Gestionnaire de révisions</title>
         <link href="Style.css" rel="stylesheet" type="text/css">
+        <link href="../Style.css" rel="stylesheet" type="text/css">
         <meta charset="UTF-8">
     </head>
     <body>
+        <div class="home"><a href='/index.html'>Retour</a></div>
         <div id="Sessions">
             <h1>Sessions de révisions</h1>
             <ul id="subjectslist">
@@ -24,8 +26,8 @@
             <input type="number" id="limit" onchange="limitChanged();"></input>
             <button type="button" onclick="if(confirm('Êtes vous sûr de vouloir réinitialiser votre planning de travail ?')) {studyDatas = new StudyDatas(); makePage();}">Réinitialiser le planning</button>
         </div>
-        
-        <h2>Mode d'emploi</h2>
+
+        <h2 class="h2Left">Mode d'emploi</h2>
         <p>
             Tout d'abord, précisez dans la boîte de texte <i>nombre limite d'exercices par jours</i> combien d'exercices vous prévoyez de faire par matière chaque jour.<br>
             Ajoutez une matière en renseignant son intitulé, la date de l'examen puis validez à l'aide du bouton <i>nouvelle matière</i>.<br>
@@ -36,7 +38,7 @@
             Après chaque session d'exercices, cochez la ! Le nombre de jours de marge sera recalculé et affiché.<br>
             Pour cacher les sessions d'un chapitre, survolez le rond invisible à droite du titre puis cliquez le (de même pour les révéler).
         </p>
-        
+
         <script type="text/javascript" src="Datas.js"></script>
         <script type="text/javascript" src="Interaction.js"></script>
         <script type="text/javascript" src="IO.js"></script>
