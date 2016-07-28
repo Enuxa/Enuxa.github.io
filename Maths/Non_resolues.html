@@ -11,14 +11,12 @@
 
         </script>
     </head>
-
     <body>
         <div class="home"><a href='/index.html'>Retour</a></div>
         <h1>Questions ouvertes</h1>
         <br>
 
         <h2 class="h2Left">Analyse</h2>
-
         <ol>
             <li><h3>Equivalence en l'infini d'une fonction avec sa translation</h3>
                 <p>
@@ -52,24 +50,26 @@
                 <br>
                 D'après la seconde loi de Newton, on a \(F=m \, z''\).
                 <br>
-                L'unique force considérée est l'attraction gravitationnelle exercée par la Terre valant \(G\frac{Mm}{z^2}\), d'où :
-                $$G\frac{M \, m}{z^2} = m \, z''$$
+                L'unique force considérée est l'attraction gravitationnelle exercée par la Terre valant \(-G\frac{Mm}{z^2}\), d'où :
+                $$-G\frac{M \, m}{z^2} = m \, z''$$
 
-                $$G \, M = z^2 \, z''$$
+                $$-G \, M = z^2 \, z''$$
 
                 On peut se ramener à l'équation suivante plus simple :
 
-                $$1 = z^2 \, z''$$
+                $$-1 = z^2 \, z''$$
 
-                Supposons la solution de la forme \(z=e^h\) avec \(h \in \mathcal{C}^2(\mathbb{R}_+)\), on obtient la nouvelle équation
+                Il est clair que la fonction \(z\) est de dérivée seconde négative, il s'agit donc d'une fonction convexe.
+                <br>
+                En multipliant par \(z'\) des deux côtés, on peut intégrer :
 
-                $$1 = e^{2h}(h'e^h)'$$
+                $$-z' = z' z^2z''$$
 
-                $$1 = e^{2h}\left(h''e^h + \left(h'\right)^2e^h\right)$$
+                $$-\frac{z'}{z^2} = z' \, z''$$
 
-                $$1 = e^{3h}\left(h'' + \left(h'\right)^2\right)$$
+                $$\frac{1}{z} = \frac{1}{2}\left(z'\right)^2 + C_0$$
 
-                $$e^{-3h} = h'' + \left(h'\right)^2$$
+                $$2 = z \left(z'\right)^2 + 2C_1z$$
               </p>
             </li>
         </ol>
@@ -123,10 +123,7 @@
           </li>
           <li>
             <p>
-              Soit \(\alpha \in \mathbb{R}^*\), on définit la suite \(\displaystyle a_n = \prod_{k=1}^{n} (k \alpha - 1)\).
-            </p>
-            <p>
-              On cherche une expression close de \(a_n\) pour tout \(n\).
+              Soit \(\alpha \in \mathbb{R}^*\), on définit la suite \(\displaystyle a_n = \prod_{k=1}^{n} (k \alpha - 1)\), on cherche une expression close de \(a_n\) pour tout \(n\).
             <p>
             <p>
               Pour tout \(n \geqslant 1\), on a la relation de récurrence \(a_{n+1} = ((n+1)\alpha - 1)a_n = (n \alpha + (\alpha - 1))a_n = n \, \alpha \, a_n + (\alpha - 1) a_n\).

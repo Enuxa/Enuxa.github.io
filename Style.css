@@ -1,11 +1,11 @@
 @font-face {
-  font-family: DefaultFont;
-  src:url(Fonts/League Gothic/LeagueGothic-Regular.otf);
+  font-family: TitleFont;
+  src:url(Fonts/Lobster.otf);
 }
 
 @font-face {
-  font-family: TitleFont;
-  src:url(Fonts/Lobster.otf);
+  font-family: DefaultFont;
+  src:url(Fonts/Ubuntu/Ubuntu-R.ttf);
 }
 
 body {
@@ -18,11 +18,17 @@ body {
     border: 0;
 }
 
+button, input {
+  font-family: DefaultFont;
+  font-weight: bold;
+}
+
 .home {
   position: fixed;
   right: 5pt;
   bottom: 5pt;
-  background-color: rgb(50,50,50);
+  background-color: rgba(50,50,50,0.5);
+  color: rgba(255,255,255,0.5);
   border-radius: 5pt;
   padding: 5pt 10pt 5pt 10pt;
   font-size: 20pt;
@@ -30,6 +36,8 @@ body {
 
 .home:hover {
   background-color: rgb(50,50,50);
+  color: white;
+  transition-duration: 200ms;
 }
 
 ul, ol {
@@ -63,6 +71,7 @@ h1 {
   text-align: center;
   font-size: 50pt;
   margin: 0;
+  width: 90%
 }
 
 h1, h2, h3 {

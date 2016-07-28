@@ -3,12 +3,14 @@
     <head>
         <meta charset="utf-8">
         <title>Grammaire</title>
+        <link rel="stylesheet" type="text/css" href="../Style.css">
         <link rel="stylesheet" type="text/css" href="Style.css">
     </head>
     <body>
+        <div class="home"><a href='enuxa.github.io'>Retour</a></div>
         <div id="grammar">
             <div id="nonterminals">
-                <h2>Non terminal symbols</h2>
+                <h2 class="h2Left">Non terminal symbols</h2>
                 <table id="nonterminaltable">
                 </table>
                 <form name="newnonterminal" action="javascript:void(0)" method="post" onsubmit="newNonTerminal()">
@@ -17,7 +19,7 @@
                 </form>
             </div>
             <div id="tokens">
-                <h2>Tokens</h2>
+                <h2 class="h2Left">Tokens</h2>
                 <table id="tokentable">
                 </table>
                 <form name="newtoken" action="javascript:void(0)" method="post" onsubmit="newToken()">
@@ -29,7 +31,7 @@
                 </form>
             </div>
             <div id="rules">
-                <h2>Rules</h2>
+                <h2 class="h2Left">Rules</h2>
                 <table id="ruletable">
                 </table>
                 <form name="newrule" action="javascript:void(0)" method="post" onsubmit="newRule()">
@@ -41,7 +43,7 @@
                 </form>
             </div>
             <div id="analysis">
-                <h2>Analysis</h2>
+                <h2 class="h2Left">Analysis</h2>
                 <table>
                     <thead id="grammar">
                         G=(&Sigma;, V, S, P)
@@ -66,7 +68,7 @@
             </div>
         </div>
         <div id="parsing">
-            <h2>Parsing</h2>
+            <h2 class="h2Left">Parsing</h2>
             <form name="parseinput" action="javascript:void(0)">
                 <input type="text" name="input" oninput="parse(false)">
                 <button title="Create the parse tree" onclick="parse(true)" id="parsebutton">Parse</button>
@@ -75,7 +77,7 @@
             </svg>
         </div>
         <div id="manual">
-            <h2>Manual</h2>
+            <h2 class="h2Left">Manual</h2>
             <ol>
                 <li>Add the non-terminal symbols and select the axiom</li>
                 <li>Add the terminal symbols (tokens)</li>
@@ -88,7 +90,7 @@
         <script type="text/javascript" src="Grammar.js"></script>
         <script type="text/javascript" src="Interaction.js"></script>
         <script type="text/javascript" src="Display.js"></script>
-        
+
         <script type="text/javascript">
             updateAnalysis();
         </script>
