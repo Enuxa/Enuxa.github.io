@@ -9,7 +9,7 @@
 }
 
 body {
-    background-color: rgb(30,30,30);
+    background-color:rgb(30,30,30);
     font-family: DefaultFont;
     color: lightgray;
     font-size: 15pt;
@@ -67,15 +67,7 @@ a {
     font-style: italic;
 }
 
-h1 {
-  text-align: center;
-  font-size: 50pt;
-  margin: 0;
-  width: 90%
-}
-
 h1, h2, h3 {
-    padding: 10pt;
     display: block;
     border-radius: 10pt;
     border-width: 1px;
@@ -83,13 +75,23 @@ h1, h2, h3 {
     border-color: transparent;
 }
 
+h1 {
+  text-align: center;
+  font-size: 50pt;
+  margin: 0;
+  width: 100%
+  padding: 0;
+}
+
 h1:hover, h2:hover {
   background-color: rgb(35,35,35);
-  transition-duration: 150ms;
+  transition-duration: 1000ms;
+  transition-delay: 500ms;
 }
 
 h1, h2 {
     font-family: TitleFont;
+    padding: 10pt;
 }
 
 h1:before, h1:after {
@@ -107,7 +109,7 @@ h1:before, h1:after {
   width: 80%;
   margin: 0 10pt 0 10pt;
   vertical-align: middle;
-  border-bottom: 1pt solid gray;
+  border-bottom: 1pt solid white;
 }
 
 h3 {

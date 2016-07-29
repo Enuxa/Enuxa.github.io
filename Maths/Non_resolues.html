@@ -14,8 +14,6 @@
     <body>
         <div class="home"><a href='/index.html'>Retour</a></div>
         <h1>Questions ouvertes</h1>
-        <br>
-
         <h2 class="h2Left">Analyse</h2>
         <ol>
             <li><h3>Equivalence en l'infini d'une fonction avec sa translation</h3>
@@ -69,7 +67,7 @@
 
                 $$\frac{1}{z} = \frac{1}{2}\left(z'\right)^2 + C_0$$
 
-                $$2 = z \left(z'\right)^2 + 2C_1z$$
+                $$2 = z \left(z'\right)^2 + C_1z$$
               </p>
             </li>
         </ol>
@@ -80,17 +78,17 @@
             <h3>Coefficients de la &laquo;suite de Mandelbrot&raquo;</h3>
             <p>
               On rappelle que l'ensemble de Mandelbrot est l'ensemble des points \(c \in \mathbb{C}\) pour lesquels la suite défnie par
-              \(
+              $$
                 \left\{
                   \begin{array}{l}
                     z_{n+1} = z_n^2 + c, ~ n \geqslant 0 \\
                     z_0 = 0
                   \end{array}
                 \right.
-              \)
+              $$
               est bornée en module.
               <br>
-              Pour chaque \(n \in \mathbb{N}\), \(z_n\) est clairement un polynôme en \(c\) de degré \(2^n\).
+              Pour chaque \(n \in \mathbb{N}\), \(z_n\) est clairement un polynôme en \(c\) de degré \(2^{n-1}\).
               <br>
               Quelle est l'expression du coefficient de degré \(k\) du terme \(z_n\) ?
               <br>
@@ -117,6 +115,10 @@
                   $$z_n^2 = \sum_{k=2}^{n+1} c^k \sum_{l=0}^{k-1} C_{l} C_{k-l-1} + c^{n+2} S(c)$$
 
                   $$z_n^2 = \sum_{k=2}^{n+1} c^k C_{k} + c^{n+2} S(c)$$
+
+                  $$z_n^2 + c = \sum_{k=1}^{n+1} c^k C_{k} + c^{n+2} S(c)$$
+
+                  $$z_{n+1} = \sum_{k=1}^{n+1} c^k C_{k} + c^{n+2} S(c)$$
                 </li>
               </ul>
             </p>
