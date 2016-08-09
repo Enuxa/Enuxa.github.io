@@ -18,9 +18,26 @@ body {
     border: 0;
 }
 
-button, input {
-  font-family: DefaultFont;
-  font-weight: bold;
+input, button, select {
+    background-color: rgb(60,60,60);
+    margin-right: 10px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 1px;
+    border-radius: 3px;
+    color: lightgray;
+    padding: 4px;
+    font-family: DefaultFont;
+    font-weight: bold;
+}
+
+button:active, input[type="submit"]:active {
+    border-color: darkorange;
+}
+
+button:hover, input[type="submit"]:hover, input:focus, select:hover {
+    background-color: rgb(80,80,80);
+    transition-duration: 0.2s;
 }
 
 .home {

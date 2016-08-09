@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Splines</title>
+        <link href="../../Style.css" rel="stylesheet" type="text/css">
+        <meta charset="UTF-8">
+        <style>
+            canvas {
+                display: block;
+                margin-bottom: 20pt;
+                width: 95%;
+                height: 600px;
+                border: 1pt solid;
+                border-radius: 30pt;
+                background-color: rgb(50,50,50);
+            }
+            img {
+                margin: 30pt;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script type="text/javascript" async src="../../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        
+        <h1>Splines</h1>
+        
+        <canvas id="canvas" onmousedown="onMouseDown(event)" onmousemove="onMouseMove(event)" onmouseup="onMouseUp(event)"></canvas>
+        <p>Cliquez pour faire apparaître des points<br>Deplacez les à l'aide de la souris</p>
+        
+        <h2 class="h2Left">Explications</h2>
+        
+        <p>
+            On a une suite finie de points \((M_k)_{0 \leqslant k \leqslant n}\) tels que pour tout \(k\), \(M_k = \binom{x_k}{y_k}\) et \(x_0 \leqslant x_1 \leqslant x_2 ... \leqslant x_n\).
+            <br>
+            On cherche à tracer une courbe passant par tous ces points.
+        </p>
+        <img src="Splines_1.svg">
+        <p>
+            Traçons les droites passant par ces points
+        </p>
+        <img src="Splines_2.svg">
+        <p>
+            Puis les bissectrices des angles formés et on repasse les première et dernière droites en rouge.
+            <br>
+            <img src="Splines_3.svg">
+            <br>
+            Ces segments appartiennent aux droites affines de coefficients directeurs $$\alpha_k = \frac{1}{2}\left(\frac{y_k - y_{k-1}}{x_k-x_{k-1}} + \frac{y_{k+1} - y_k}{x_{k+1}-x_k}\right), ~ 1 \leqslant k \leqslant n-1$$.
+            $$\alpha_0 = \frac{y_1 - y_0}{x_1-x_0}$$
+            $$\alpha_n = \frac{y_n - y_{n-1}}{x_n-x_{n-1}}$$
+        </p>
+        <p>
+            On cherche à présent à tracer la courbe \(\mathcal{C}\) passant par les points\((M_k)_k\) et admettant comme tangentes les segments rouges ci-dessus.
+        </p>
+        <img src="Splines_4.svg">
+        <p>
+            La solution que nous adoptons ici est celle de la spline : un pôlynome défini par morceaux.
+            On raccordera chaque couples de points \((M_k, M_{k+1})\) par le graphe d'un polynôme \(P_k\) de degré au plus 3, avec \(k < n\).
+        </p>
+        <p>
+            On cherche alors \(P_k\) vérifiant
+            $$\left\{
+                \begin{array}{l}
+                    P_k(x_k) = y_k \\
+                    P_k(x_{k+1}) = y_{k+1} \\
+                    P'_k(x_k) = \alpha_k \\
+                    P'_k(x_{k+1}) = \alpha_{k+1} \\
+                \end{array}
+            \right.$$
+            On effectue le changement de polynôme inconnu \(Q_k = P_k(X + x_k) = aX^3 + bX^2 + c X + d\) afin qu'il vérifie \(Q_k(0)=d=y_k\).
+            <br>
+            On obtient le nouveau système
+            
+            $$\left\{
+                \begin{array}{l}
+                    Q_k(0) = d = y_k \\
+                    Q_k(x_{k+1}-x_k) = a(x_{k+1}-x_k)^3 + b(x_{k+1}-x_k)^2 + c (x_{k+1}-x_k) + d = y_{k+1} \\
+                    Q'_k(0) = c = \alpha_k \\
+                    Q'_k(x_{k+1} - x_k) = 3a(x_{k+1} - x_k)^2 + 2b(x_{k+1} - x_k) + c = \alpha_{k+1} \\
+                \end{array}
+            \right.$$
+            
+            écrit matriciellement et en posant \(\delta= x_{k+1} - x_k\)
+            
+            $$
+                M
+                \left(
+                    \begin{array}{c}
+                        a \\
+                        b \\
+                        c \\
+                        d \\
+                    \end{array}
+                \right)
+                
+                =
+                
+                \left(
+                    \begin{array}{c}
+                        y_k \\
+                        y_{k+1} \\
+                        \alpha_k \\
+                        \alpha_{k+1} \\
+                    \end{array}
+                \right)
+            $$
+            
+            avec
+            
+            $$M = 
+                \left(
+                    \begin{array}{c}
+                        0 & 0 & 0 & 1\\
+                        \delta^3 & \delta^2 & \delta & 1\\
+                        0 & 0 & 1 & 0 \\
+                        3 \delta^2 & 2 \delta & 1 & 0 \\
+                    \end{array}
+                \right)$$
+            Il ne reste plus qu'à trouver \(M^{-1}\).
+            
+            $$\left(
+                    \begin{array}{cccc|cccc}
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \delta^3 & \delta^2 & \delta & 1 & 0 & 1 & 0 & 0\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        3 \delta^2 & 2 \delta & 1 & 0 & 0 & 0 & 0 & 1\\
+                    \end{array}
+                \right)
+                
+                \longrightarrow
+                
+                \left(
+                    \begin{array}{cccc|cccc}
+                        \delta^3 & \delta^2 & \delta & 1 & 0 & 1 & 0 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        3 \delta^2 & 2 \delta & 1 & 0 & 0 & 0 & 0 & 1\\
+                    \end{array}
+                \right)$$
+
+            $$
+                \left(
+                    \begin{array}{cccc|cccc}
+                        \delta^3 & \delta^2 & \delta & 1 & 0 & 1 & 0 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        3 \delta^2 & 2 \delta & 1 & 0 & 0 & 0 & 0 & 1\\
+                    \end{array}
+                \right)
+                
+                \longrightarrow
+                
+                \left(
+                    \begin{array}{cccc|cccc}
+                        \delta^3 & \delta^2 & \delta & 1 & 0 & 1 & 0 & 0\\
+                        3 \delta^2 & 2 \delta & 1 & 0 & 0 & 0 & 0 & 1\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                    \end{array}
+                \right)
+            $$
+            
+            $$
+                \left(
+                    \begin{array}{cccc|cccc}
+                        \delta^3 & \delta^2 & \delta & 1 & 0 & 1 & 0 & 0\\
+                        3 \delta^2 & 2 \delta & 1 & 0 & 0 & 0 & 0 & 1\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                    \end{array}
+                \right)
+                
+                \longrightarrow
+                                
+                \left(
+                    \begin{array}{cccc|cccc}
+                        1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                        1 & \frac{2}{3} \delta^{-1} & \frac{1}{3}\delta^{-2} & 0 & 0 & 0 & 0 & \frac{1}{3}\delta^{-2}\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                    \end{array}
+                \right)
+            $$
+            
+            $$
+                \left(
+                    \begin{array}{cccc|cccc}
+                        1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                        1 & \frac{2}{3} \delta^{-1} & \frac{1}{3}\delta^{-2} & 0 & 0 & 0 & 0 & \frac{1}{3}\delta^{-2}\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                    \end{array}
+                \right)
+                
+                \longrightarrow
+
+                \left(
+                    \begin{array}{cccc|cccc}
+                        1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                        0 & -\frac{1}{3} \delta^{-1} & -\frac{2}{3}\delta^{-2} & -\delta^{-3} & 0 & -\delta^{-3} & 0 & \frac{1}{3}\delta^{-2}\\
+                        0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                        0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                    \end{array}
+                \right)
+                $$
+                
+                $$
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                            0 & -\frac{1}{3} \delta^{-1} & -\frac{2}{3}\delta^{-2} & -\delta^{-3} & 0 & -\delta^{-3} & 0 & \frac{1}{3}\delta^{-2}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                
+                    \longrightarrow
+                    
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                            0 & 1 & 2\delta^{-1} & 3\delta^{-2} & 0 & 3\delta^{-2} & 0 & -\delta^{-1}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                $$
+                
+                $$
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & \delta^{-1} & \delta^{-2} & \delta^{-3} & 0 & \delta^{-3} & 0 & 0\\
+                            0 & 1 & 2\delta^{-1} & 3\delta^{-2} & 0 & 3\delta^{-2} & 0 & -\delta^{-1}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                    
+                    \longrightarrow
+                                        
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & \delta^{-1} & 0 & \delta^{-3} & 0 & \delta^{-3} & -\delta^{-2} & 0\\
+                            0 & 1 & 0 & 3\delta^{-2} & 0 & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                $$
+                
+                $$
+                    \left(
+                            \begin{array}{cccc|cccc}
+                                1 & \delta^{-1} & 0 & \delta^{-3} & 0 & \delta^{-3} & -\delta^{-2} & 0\\
+                                0 & 1 & 0 & 3\delta^{-2} & 0 & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                                0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                                0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                            \end{array}
+                    \right)
+                        
+                    \longrightarrow
+                        
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & \delta^{-1} & 0 & 0 & -\delta^{-3} & \delta^{-3} & -\delta^{-2} & 0\\
+                            0 & 1 & 0 & 0 & -3\delta^{-2} & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                $$
+                
+                $$
+                    \left(
+                            \begin{array}{cccc|cccc}
+                                1 & \delta^{-1} & 0 & 0 & -\delta^{-3} & \delta^{-3} & -\delta^{-2} & 0\\
+                                0 & 1 & 0 & 0 & -3\delta^{-2} & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                                0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                                0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                            \end{array}
+                    \right)
+                    
+                    \longrightarrow
+                    
+                    \left(
+                        \begin{array}{cccc|cccc}
+                            1 & 0 & 0 & 0 & 2\delta^{-3} & -2\delta^{-3} & \delta^{-2} & \delta^{-2}\\
+                            0 & 1 & 0 & 0 & -3\delta^{-2} & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                            0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+                            0 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)    
+                $$
+                
+                On a ainsi \(M^{⁻1} = \left(
+                        \begin{array}{cccc}
+                            2\delta^{-3} & -2\delta^{-3} & \delta^{-2} & \delta^{-2}\\
+                            -3\delta^{-2} & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                            0 & 0 & 1 & 0\\
+                            1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)\), ce qui nous permet de trouver
+                    
+                $$
+                    \left(
+                        \begin{array}{c}
+                            a \\
+                            b \\
+                            c \\
+                            d \\
+                        \end{array}
+                    \right)
+                    =
+                    M^{-1} 
+                    
+                    \left(
+                        \begin{array}{c}
+                            y_k \\
+                            y_{k+1} \\
+                            \alpha_k \\
+                            \alpha_{k+1} \\
+                        \end{array}
+                    \right)
+                $$
+                
+                $$
+                    \left(
+                        \begin{array}{c}
+                            a \\
+                            b \\
+                            c \\
+                            d \\
+                        \end{array}
+                    \right)
+                    =
+                    \left(
+                        \begin{array}{cccc}
+                            2\delta^{-3} & -2\delta^{-3} & \delta^{-2} & \delta^{-2}\\
+                            -3\delta^{-2} & 3\delta^{-2} & -2\delta^{-1} & -\delta^{-1}\\
+                            0 & 0 & 1 & 0\\
+                            1 & 0 & 0 & 0\\
+                        \end{array}
+                    \right)
+                    
+                    \left(
+                        \begin{array}{c}
+                            y_k \\
+                            y_{k+1} \\
+                            \alpha_k \\
+                            \alpha_{k+1} \\
+                        \end{array}
+                    \right)
+                $$
+                
+                $$
+                    \left(
+                        \begin{array}{c}
+                            a \\
+                            b \\
+                            c \\
+                            d \\
+                        \end{array}
+                    \right)
+                    
+                    =
+                    
+                    \left(
+                        \begin{array}{c}
+                            2\delta^{-3} y_k - 2\delta^{-3} y_{k+1} + \delta^{-2} \alpha_{k} + \delta^{-2} \alpha_{k+1}\\
+                            -3\delta^{-2} y_k + 3\delta^{-2} y_{k+1} - 2\delta^{-1} \alpha_k - \delta^{-1} \alpha_{k+1}\\
+                            \alpha_k\\
+                            y_k\\
+                        \end{array}
+                    \right)
+                $$
+                
+            On a finalement
+            $$
+                \left\{
+                    \begin{array}{l}
+                        a = \frac{2 (y_{k} - y_{k+1})  + \delta (\alpha_{k+1} + \alpha_k)}{\delta^3} \\
+                        b = \frac{3 (y_{k+1} - y_{k}) - \delta (2 \alpha_k + \alpha_{k+1})}{\delta^2} \\
+                        c = \alpha_k \\
+                        d = y_k \\
+                    \end{array}
+                \right.
+            $$
+        </p>
+        <p>
+            Le polynôme recherché est donc \(P_k = Q_k(X-x_k) = a (X-x_k)^3 + b (X-x_k)^2 + c (X-x_k) + d\).
+        </p>
+        
+        <script type="text/javascript" src="Script.js"></script>
+    </body>
+</html>

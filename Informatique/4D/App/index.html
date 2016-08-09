@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+		<head>
+				<title>Projection</title>
+				<link href="../../../Style.css" rel="stylesheet" type="text/css">
+				<meta charset="UTF-8">
+      	<script type="text/javascript" src="../../../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <style>
+          canvas {
+            width: 600px;
+            height: 450px;
+            border-radius: 20px;
+            border: solid 1px;
+            margin-top: 20px;
+            display: block;
+            background: rgb(50,50,50);
+          }
+					input {
+						width: 50px;
+					}
+        </style>
+		</head>
+		<body>
+			<div>
+	      <label for="cinput">\(C\)</label>
+	      <input type="text" id="cinput" onchange="updateView()" value="0;-1;0;0">
+	      <label for="f1input">\(f_1\)</label>
+	      <input type="text" id="f1input" onchange="updateBase()" value="1;0;0;0">
+	      <label for="f1input">\(f_2\)</label>
+	      <input type="text" id="f2input" onchange="updateBase()" value="0;1;0;0">
+			</div>
+			<div>
+	      <label for="fovx">Angle de vue horizontal</label>
+	      <input type="number" id="fovx" onchange="updateView()" value="45">
+				<label for="fovy">Angle de vue vertical</label>
+	      <input type="number" id="fovy" onchange="updateView()" value="70">
+			</div>
+			<div>
+	      <label>Translation</label>
+	      <input type="number" id="translationx" onchange="updateTransform()" value="0">
+	      <input type="number" id="translationy" onchange="updateTransform()" value="4">
+	      <input type="number" id="translationz" onchange="updateTransform()" value="0">
+	      <input type="number" id="translationt" onchange="updateTransform()" value="0">
+			</div>
+      <canvas id="canvas">
+      </canvas>
+			<script type="text/javascript" src="Projection.js"></script>
+			<script type="text/javascript" src="Geometry.js"></script>
+			<script type="text/javascript" src="Interaction.js"></script>
+			<script type="text/javascript" src="Script.js"></script>
+		</body>
+</html>
