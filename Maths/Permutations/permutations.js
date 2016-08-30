@@ -150,13 +150,62 @@ function PermutationSet() {
     }
     
     this.toString = function() {
-        var str = "{";
-        var next = "";
+        var str = "";
+        var i = 1;
         for (let f of this.values) {
-            str += f.toString() + ",";
+            str += f.toString();
+            if (i < this.values.size) {
+                str += ", ";
+            }
+            i++;
         }
         
-        return str + "}";
+        return str;
+    }
+    
+    this.sort = function () {
+        var t = [];
+        for (let f of this.values) {
+            t.push(f);
+        }
+        
+        return t.sort(
+            function(f, g) {
+                var cyclesf = decompose(f);
+                var cyclesg = decompose(g);
+                
+                if (cyclesf.length > cyclesg.length)
+                    return 1;
+                else if (cyclesf.length < cyclesg.length)
+                    return -1;
+                
+                var lengthf = [], lengthg = [];
+                for (var i = 0; i < cyclesf.length; i++) {
+                    lengthf.push(cyclesf[i].length);
+                    lengthg.push(cyclesg[i].length);
+                }
+                var intSort = function (a, b) {
+                        if (a > b)
+                            return 1;
+                        else if (a < b)
+                            return -1;
+                        else
+                            return 0;
+                    };
+                lengthf.sort(intSort);
+                lengthg.sort(intSort);
+                
+                for (var i = 0; i < lengthf.length; i++) {
+                    if (lengthf[i] > lengthg[i]) {
+                        return 1;
+                    } else if (lengthf[i] < lengthg[i]) {
+                        return -1;
+                    }
+                }
+                
+                return 0;
+            }
+        );
     }
 }
 

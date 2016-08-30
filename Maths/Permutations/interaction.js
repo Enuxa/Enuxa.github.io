@@ -130,9 +130,19 @@ function onGenerateClick() {
         initialSet.add(fromString(str));
     }
     
-    var subgroup = generateSubgroup(initialSet);
+    var subgroup = generateSubgroup(initialSet).sort();
+    
+    var str = "";
+    for (var i = 0; i < subgroup.length; i++) {
+        str += subgroup[i].toString();
+        if (i < subgroup.length - 1) {
+            str += ", ";
+        }
+    }
     
     var p = document.getElementById("subgroup");
     
-    p.innerHTML = subgroup.toString();
+    p.innerHTML = "\\(\\{" + str + "\\}\\)";
+    
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,p]);
 }
