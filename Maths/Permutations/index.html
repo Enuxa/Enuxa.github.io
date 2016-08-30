@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Permutations</title>
+        <link href="../../Style.css" rel="stylesheet" type="text/css">
+        <meta charset="UTF-8">
+
+        <script type="text/javascript" src="../../MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+        <style>
+            #decomposition_up, #decomposition_down {
+                display: block;
+                margin-bottom: 10pt; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="home"><a href='/index.html'>Retour</a></div>
+        <h1>Permutations</h1>
+        <article>
+            <h2 class="h2Left">Composition de permutations</h2>
+            <input type="text" id="composition_input" placeholder="(1, 2, 3)(1, 2, 5)" onkeyup="onCompositionChange();"></input>
+            <button onclick="onComposeClick();">Composer</button>
+            <p id="composition"></p>
+        </article>
+        <article>
+            <h2 class="h2Left">Décomposition en cycles disjoints</h2>
+            <p>
+                Ecrivez une permutations \(\sigma \in \frak{S}_n\) sous la forme
+                \(
+                  \left(
+                      \begin{array}{c}
+                        1 & 2 & 3 & ... & n \\
+                        \sigma(1) & \sigma(2) & \sigma(3) & ... & \sigma(n)
+                      \end{array}  
+                  \right)
+                \)
+            </p>
+            <input type="text" id="decomposition_up" placeholder="1 2 3 4">
+            <input type="text" id="decomposition_down" placeholder="3 1 2 4">
+            <button onclick="onDecomposeClick();">Décomposer</button>
+            <p id="decomposition"></p>
+        </article>
+        
+        
+        <script type="text/javascript" src="permutations.js"></script>
+        <script type="text/javascript" src="interaction.js"></script>
+    </body>
+</html>

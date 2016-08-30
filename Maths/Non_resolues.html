@@ -162,5 +162,62 @@
             <br>
           </li>
         </ol>
+        <h2 class="h2Left">Algèbre</h2>
+        <ol>
+            <li><h3>Nombre de classes de conjugaison d'un \(p\)-groupe d'ordre \(p^3\) non-abélien</h3>
+                <p>
+                  Soit \(p\) un nombre premier et \(G\) un groupe non-abélien d'ordre \(p^3\).
+                  <br>
+                  Montrons que \(G\) admet \(p^2+p-1\) classes de conjuaison.
+                </p>
+                <p>
+                  On considère l'action de \(G\) sur lui même par conjugaison, les classes de conjugaison sont les orbites \(\mathcal{O}=\{\mathcal{O}_{x_1}, \mathcal{O}_{x_2}, ..., \mathcal{O}_{x_n}\}\) associées à cette action.
+                  <br>
+                  On distingue parmi elles les orbites à un élément \(\mathcal{O}_x=\{x\}\).
+                  <br>
+                  Or
+                  $$\forall g \in G, ~ gxg^{-1}=x \Leftrightarrow x \in Z(G)$$
+                  \(Z(G)\) étant un sous-groupe, on en déduit
+                  $$\left|Z(G)\right| = \left\{
+                  \begin{array}{l l}
+                    1 & \text{Impossible car } G \text{ est un }p \text{-groupe}\\
+                    p\\
+                    p^2 &  \text{Impossible sinon } G/Z(G) \text{ serait d'ordre } p \text{ donc cyclique et } G \text{ serait alors abélien}\\
+                    p^3&  \text{Impossible car } G \text{ est non-abélien}
+                  \end{array}\right.$$
+                  Chaque élément de \(Z(G)\) possède donc une unique orbite à un élément : \(\mathcal{O}_x=\{x\}\), d'où
+                  $$\mathcal{O} = \left\{\mathcal{O}_x , ~ x \in Z(G)\right\} \sqcup \left\{\mathcal{O}_x , ~ x \not\in Z(G)\right\}$$
+                  
+                  $$\mathcal{O} = \left\{\{x\} , ~ x \in Z(G)\right\} \sqcup \left\{\mathcal{O}_x , ~ x \not\in Z(G)\right\}$$
+                  
+                  $$\left|\mathcal{O}\right| = \left|Z(G)\right| + \left|\left\{\mathcal{O}_x , ~ x \not\in Z(G)\right\}\right|$$
+                  
+                  $$\left|\mathcal{O}\right| = p + \left|\left\{\mathcal{O}_x , ~ x \not\in Z(G)\right\}\right|$$
+                  <br>
+                </p>
+                <p>
+                  Quelles tailles peuvent avoir les orbites ?
+                  <br>
+                  D'après l'équation aux classes
+                  $$\forall x \in G, ~ \left|\mathcal{O_x}\right| = \frac{p^3}{\left|S_x\right|}$$
+                  et
+                  $$\left|S_x\right| = \left\{
+                  \begin{array}{l l}
+                    1 & \text{Impossible car } Z(G) = \cap_{g \in G}S_g\\
+                    p \\
+                    p^2 \\
+                    p^3 &  \text{Possible si et seulement si } x = e \text{ qui a déjà été compté dans } Z(G)
+                  \end{array}\right.$$
+                  ainsi \(\left|\mathcal{O}_x\right|= \left\{
+                  \begin{array}{l}
+                    p \\
+                    p^2 \\
+                  \end{array}\right.\).
+                  <br>
+                  Il s'agit donc de trouver les quantités \(\alpha\) d'orbites à \(p\) éléments et \(\beta\) à \(p^2\) pour conclure
+                  $$\left|\mathcal{O}\right| = p + \alpha + \beta$$
+                </p>
+            </li>
+        </ol>
     </body>
 </html>
