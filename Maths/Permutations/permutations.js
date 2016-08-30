@@ -22,6 +22,22 @@ function Permutation() {
         return elements;
     }
     
+    this.equals = function (f) {
+        var different = false;
+        var elements = f.getElements();
+        for (let i of this.getElements()) {
+            elements.add(i);
+        }
+        
+        for (let i of elements) {
+            if (f.get(i) != this.get(i)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     this.toString = function () {
         var cycles = decompose(this);
         var str = "";
@@ -104,4 +120,65 @@ function fromCycle(c) {
     }
     
     return f;
+}
+
+function PermutationSet() {
+    this.values = new Set();
+    this.add = function (f) {
+        for (let g of this.values) {
+            if (g.equals(f)) {
+                return;
+            }
+        }
+        
+        this.values.add(f);
+    }
+    
+    this.remove = function(f) {
+        for (let g of this.values) {
+            if (g.equals(f)) {
+                this.values.delete(g);
+                return;
+            }
+        }
+    }
+    
+    this.union = function(E){
+        for (let f of E.values) {
+            this.add(f);
+        }
+    }
+    
+    this.toString = function() {
+        var str = "{";
+        var next = "";
+        for (let f of this.values) {
+            str += f.toString() + ",";
+        }
+        
+        return str + "}";
+    }
+}
+
+function generateSubgroup(family) {
+    var subgroup = new PermutationSet();
+    subgroup.add(new Permutation());
+    
+    var previousSize;
+    do {
+        var previousSize = subgroup.values.size;
+        var P = new PermutationSet();
+        for (let f of family.values) {
+            for (let g of subgroup.values) {
+                var h1 = multiply(f, g);
+                var h2 = multiply(g, f);
+                P.add(h1);
+                P.add(h2);
+            }
+        }
+        
+        subgroup.union(P);
+    } while (previousSize != subgroup.values.size)
+    
+    return subgroup;
 }

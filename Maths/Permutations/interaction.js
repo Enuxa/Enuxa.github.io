@@ -72,9 +72,7 @@ function onComposeClick() {
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,output]);
 }
 
-function onCompositionChange() {
-    var input = document.getElementById("composition_input");
-
+function checkPermutationInput(input) {
     try {
         var f = fromString(input.value);
         var s = f.toString();
@@ -88,4 +86,53 @@ function onCompositionChange() {
     } else {
         input.style = "color:red;";
     }
+}
+
+function removeGenerator(inputIndex) {
+    var list = document.getElementById("generatorlist");
+    var element = document.getElementById("generator_" + inputIndex);
+    list.removeChild(element);
+}
+
+var generatorCount = 0;
+function addGenerator() {
+    var li = document.createElement("li");
+    li.id = "generator_" + generatorCount;
+    
+    var button = document.createElement("button");
+    button.innerText = "-";
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    input.setAttribute("onkeyup", "checkPermutationInput(this)");
+    input.id = "generator_input_" + generatorCount;
+    input.placeholder = "(1,2)(4,8,2)";
+    button.setAttribute("onclick", "removeGenerator(" + generatorCount + ")");
+
+    li.appendChild(input);
+    li.appendChild(button);
+    
+    var list = document.getElementById("generatorlist");
+    
+    list.appendChild(li);
+    generatorCount++;
+}
+
+function onGenerateClick() {
+    var list = document.getElementById("generatorlist");
+    var children = list.childNodes;
+    var initialSet = new PermutationSet();
+    for (var i = 0; i < children.length; i++) {
+        var li = children.item(i);
+        var input = li.childNodes.item(0);
+        var str = input.value;
+        
+        initialSet.add(fromString(str));
+    }
+    
+    var subgroup = generateSubgroup(initialSet);
+    
+    var p = document.getElementById("subgroup");
+    
+    p.innerHTML = subgroup.toString();
 }

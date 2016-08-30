@@ -19,9 +19,16 @@
         <h1>Permutations</h1>
         <article>
             <h2 class="h2Left">Composition de permutations</h2>
-            <input type="text" id="composition_input" placeholder="(1, 2, 3)(1, 2, 5)" onkeyup="onCompositionChange();"></input>
+            <input type="text" id="composition_input" placeholder="(1, 2, 3)(1, 2, 5)" onkeyup="checkPermutationInput(this);"></input>
             <button onclick="onComposeClick();">Composer</button>
             <p id="composition"></p>
+        </article>
+        <article>
+            <h2 class="h2Left">Sous-groupes engendré</h2>
+            <ul id="generatorlist"></ul>
+            <button onclick="addGenerator();">Ajouter un générateur</button>
+            <button onclick="onGenerateClick();">Générer</button>
+            <p id="subgroup"></p>
         </article>
         <article>
             <h2 class="h2Left">Décomposition en cycles disjoints</h2>
@@ -42,8 +49,10 @@
             <p id="decomposition"></p>
         </article>
         
-        
         <script type="text/javascript" src="permutations.js"></script>
         <script type="text/javascript" src="interaction.js"></script>
+        <script type="text/javascript">
+            addGenerator();
+        </script>
     </body>
 </html>
